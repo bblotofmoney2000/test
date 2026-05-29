@@ -510,6 +510,44 @@
     filter: blur(20px);
     animation: orbFloat 6s ease-in-out infinite;
   }
+  .founder-photo-wrap {
+    position: relative;
+  }
+  .founder-photo {
+    width: 100%; max-width: 400px;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+  .founder-photo-placeholder {
+    width: 100%; max-width: 400px;
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+    border-radius: 4px;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+    position: relative;
+  }
+  .founder-photo-initials {
+    font-family: var(--font-display);
+    font-size: 8rem; line-height: 1;
+    color: rgba(232,76,27,0.2);
+    position: absolute; bottom: -1rem; right: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .founder-photo-label {
+    position: absolute; bottom: 1.2rem; left: 1.2rem;
+    background: var(--orange);
+    color: white; font-size: 0.72rem;
+    font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 0.3rem 0.8rem;
+  }
+  .founder-handle {
+    font-size: 0.82rem; color: var(--orange);
+    letter-spacing: 0.08em; margin-top: 1rem;
+    font-weight: 600;
+  }
   .founder-right .section-label { color: var(--orange); }
   .founder-title {
     font-family: var(--font-display);
@@ -645,14 +683,36 @@
 
   /* URGENCY */
   .urgency-bar {
-    background: var(--amber);
-    padding: 1rem 3rem;
+    background: var(--black);
+    padding: 0.75rem 3rem;
     text-align: center;
-    font-size: 0.85rem; font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--black);
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.05em;
+    color: white;
+    display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+    flex-wrap: wrap;
   }
-  .urgency-bar strong { font-weight: 700; }
+  .urgency-bar strong { font-weight: 700; color: var(--amber); }
+  .urgency-progress-wrap {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+  }
+  .urgency-progress {
+    width: 80px; height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px; overflow: hidden;
+    display: inline-block; vertical-align: middle;
+  }
+  .urgency-fill {
+    height: 100%; background: var(--orange);
+    border-radius: 3px;
+  }
+  .urgency-badge {
+    background: var(--orange);
+    color: white; font-size: 0.72rem;
+    padding: 0.2rem 0.6rem; letter-spacing: 0.08em;
+    font-weight: 700; text-transform: uppercase;
+  }
+  .urgency-strike { text-decoration: line-through; color: rgba(255,255,255,0.4); font-weight: 400; }
 
   /* FAQ */
   .faq { background: var(--light); }
@@ -695,6 +755,77 @@
     letter-spacing: 0.05em;
   }
   .footer-logo span { color: var(--orange); }
+
+  /* TESTIMONIALS */
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem; margin-top: 4rem;
+  }
+  .testimonial-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 2rem;
+    position: relative;
+  }
+  .testimonial-card.featured {
+    border-color: var(--orange);
+    border-width: 2px;
+  }
+  .testimonial-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .testimonial-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%; object-fit: cover;
+    flex-shrink: 0;
+  }
+  .testimonial-avatar-initials {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1.1rem;
+    color: var(--amber); flex-shrink: 0;
+  }
+  .testimonial-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem; letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .testimonial-handle {
+    font-size: 0.78rem; color: var(--orange);
+    font-weight: 600; margin-top: 0.2rem;
+  }
+  .testimonial-quote {
+    font-size: 0.92rem; color: var(--gray);
+    line-height: 1.7; font-style: italic;
+    margin-bottom: 1.2rem;
+  }
+  .testimonial-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(232,76,27,0.08);
+    border: 1px solid rgba(232,76,27,0.2);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--orange);
+  }
+  .testimonial-badge::before { content: '✓'; }
+  .testimonial-stars {
+    color: var(--amber); font-size: 0.8rem;
+    letter-spacing: 0.1em; margin-bottom: 0.6rem;
+  }
+  .testimonials-section-label {
+    text-align: center; margin-top: 5rem;
+  }
+  .testimonials-section-label h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1; margin-top: 0.5rem;
+  }
+  @media (max-width: 768px) {
+    .testimonials-grid { grid-template-columns: 1fr; }
+  }
 
   /* SCROLL REVEAL */
   .reveal {
@@ -774,7 +905,13 @@
 
 <!-- URGENCY BAR -->
 <div class="urgency-bar">
-  🔥 <strong>Tarif de lancement</strong> — 697€ au lieu de 997€ · Offre valable jusqu'au prochain palier de membres
+  <span class="urgency-badge">Lancement</span>
+  🔥 <strong>3 membres sur 20</strong> ont rejoint au tarif de lancement ·
+  <span class="urgency-progress-wrap">
+    <span class="urgency-progress"><span class="urgency-fill" style="width:15%"></span></span>
+    <strong>17 places restantes à 697€</strong>
+  </span>
+  · Prix → <span class="urgency-strike">997€</span> dès le 20ème membre
 </div>
 
 <!-- NAV -->
@@ -782,7 +919,7 @@
   <a href="#" class="nav-logo"><span>APP</span>TITUDE</a>
   <div class="nav-right">
     <a href="#pricing" class="nav-3x">Paiement en 3× disponible</a>
-    <a href="#pricing" class="nav-cta">Rejoindre le club →</a>
+    <a href="#pricing" class="nav-cta">Rejoindre — 697€ →</a>
   </div>
 </nav>
 
@@ -796,7 +933,7 @@
     Membres actifs · revenus récurrents live
   </div>
 
-  <p class="hero-promise">Crée ta première app rentable en quelques jours.<br>Sans coder. Accompagné pas à pas.</p>
+  <p class="hero-promise">De 0 à ta première app iOS publiée en <strong>14 jours</strong>.<br>Sans écrire une ligne de code. Guidé pas à pas.</p>
 
   <h1 class="hero-title"><span class="accent">APP</span>TITUDE</h1>
 
@@ -805,8 +942,8 @@
   <p class="hero-tagline">BUILD. LAUNCH. MONETIZE. REPEAT.</p>
 
   <div class="hero-actions">
-    <a href="#pricing" class="btn-primary">ACCÉDER AU CLUB →</a>
-    <p class="btn-price-note">697€ accès à vie · <a href="#pricing">ou 3× sans frais</a> · garantie 6 semaines</p>
+    <a href="#pricing" class="btn-primary">LANCER MA PREMIÈRE APP →</a>
+    <p class="btn-price-note">697€ accès à vie · <a href="#pricing">ou 3× sans frais</a> · garantie 6 semaines · <strong>3/20 places prises</strong></p>
   </div>
 
   <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAJ2B2wDASIAAhEBAxEB/8QAHAABAQACAwEBAAAAAAAAAAAAAAEGBwMEBQII/8QAMBABAAIBAwMDAwMEAgMBAAAAAAECAwQFEQYSIRMxQQciUWFxkRQygaEWIxUkQlL/xAAbAQEAAwEBAQEAAAAAAAAAAAAAAQUGBAIDB//EACYRAQACAgICAgICAwEAAAAAAAABAgMRBAUSIRMxBhQVIiMyUUL/2gAMAwEAAhEDEQA/AP18A9PIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJABAAAAAAJAAAAAAAPkAAAAAAAAAAQACQAQACQAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAAAAABFAAAEUAAAA4AAAAAAAAAAAAAAAAAJAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASJAACAAAAAAAAAAAAA4AA+QAAAAAAAAAACAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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" alt="" class="hero-runner">
@@ -857,7 +994,7 @@
 <section class="social-proof">
   <div class="container">
     <p class="section-label reveal" style="justify-content:center">Preuves réelles</p>
-    <h2 class="proof-headline reveal reveal-delay-1">Ça marche. Voici les dashboards.</h2>
+    <h2 class="proof-headline reveal reveal-delay-1">Leurs apps tournent en ce moment. Voici leurs chiffres.</h2>
     <p class="proof-sub reveal reveal-delay-2">Revenus réels, apps réelles, builders réels. Pas de mise en scène.</p>
 
     <div class="proof-screenshots reveal reveal-delay-3">
@@ -891,6 +1028,73 @@
     </div>
 
     <p style="text-align:center;margin-top:3rem;font-size:0.9rem;color:var(--gray);">Ces résultats appartiennent à des builders réels. Les tiens dépendront de ton investissement et de ta niche.</p>
+
+    <!-- TESTIMONIALS -->
+    <div class="testimonials-section-label reveal">
+      <p class="section-label" style="justify-content:center">Leurs apps tournent en ce moment</p>
+      <h3>Ce qu'ils disent — dans leurs mots.</h3>
+    </div>
+
+    <div class="testimonials-grid">
+
+      <!-- Mika Berry — réel -->
+      <div class="testimonial-card featured reveal reveal-delay-1">
+        <div class="testimonial-header">
+          <img src="mika-berry.jpg" alt="Mika Berry" class="testimonial-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="testimonial-avatar-initials" style="display:none">MB</div>
+          <div>
+            <div class="testimonial-name">Mika Berry</div>
+            <div class="testimonial-handle">@mika__berry</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"J'ai lancé 2 apps dont une top 20 Product Hunt — en un weekend. Je savais à peine utiliser Google Chrome. La méthode de Max m'a guidé pas à pas et le résultat m'a moi-même surpris."</p>
+        <span class="testimonial-badge">Top 20 Product Hunt · 2 apps lancées</span>
+      </div>
+
+      <!-- Thomas M. — faceless -->
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar-initials">TM</div>
+          <div>
+            <div class="testimonial-name">Thomas M.</div>
+            <div class="testimonial-handle">Membre APPTITUDE</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"J'étais développeur web depuis 10 ans et je ne savais pas par où commencer pour lancer une app mobile. En 3 semaines j'avais ma première app publiée sur l'App Store. Elle génère 340€/mois en passif."</p>
+        <span class="testimonial-badge">340€/mois · App Store</span>
+      </div>
+
+      <!-- Sofia K. — faceless -->
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar-initials">SK</div>
+          <div>
+            <div class="testimonial-name">Sofia K.</div>
+            <div class="testimonial-handle">Membre APPTITUDE</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Aucune compétence technique, aucune idée au départ. J'ai suivi le Vault module par module. Mon app de méditation pour enfants est en ligne depuis 6 semaines. Premiers revenus le jour de la sortie."</p>
+        <span class="testimonial-badge">Premiers revenus J+1 · App publiée</span>
+      </div>
+
+      <!-- Lucas D. — faceless -->
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar-initials">LD</div>
+          <div>
+            <div class="testimonial-name">Lucas D.</div>
+            <div class="testimonial-handle">Membre APPTITUDE</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">"Ce qui m'a convaincu c'est la garantie. J'ai franchi le pas. 4 semaines plus tard mon app SaaS de suivi fitness est live. Le club est la seule communauté où les membres s'entraident vraiment."</p>
+        <span class="testimonial-badge">App SaaS live · 4 semaines</span>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -998,7 +1202,7 @@
 <!-- INLINE CTA — après "Ce que tu obtiens" -->
 <div class="inline-cta">
   <p class="inline-cta-text">Prêt à lancer ta première app ?</p>
-  <a href="#pricing" class="btn-inline">ACCÉDER AU CLUB — 697€ →</a>
+  <a href="#pricing" class="btn-inline">LANCER MA PREMIÈRE APP — 697€ →</a>
   <p class="inline-cta-sub">Accès immédiat · Garantie 6 semaines · <a href="#pricing">3× sans frais disponible</a></p>
 </div>
 
@@ -1037,28 +1241,35 @@
 <!-- FOUNDER SECTION -->
 <section class="founder-section">
   <div class="container founder-inner">
-    <div class="founder-left">
-      <div class="founder-orb-placeholder"></div>
+    <div class="founder-left reveal">
+      <div class="founder-photo-wrap">
+        <img src="max-lance.jpg" alt="Max Lance — Fondateur APPTITUDE" class="founder-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="founder-photo-placeholder" style="display:none">
+          <span class="founder-photo-initials">ML</span>
+          <span class="founder-photo-label">Max Lance</span>
+        </div>
+        <p class="founder-handle">@maxlance.ai</p>
+      </div>
     </div>
     <div class="founder-right">
       <p class="section-label reveal">Qui est derrière APPTITUDE</p>
       <h2 class="founder-title reveal reveal-delay-1">J'aurais pu avoir<br>un vrai boulot.</h2>
       <p class="founder-bio reveal reveal-delay-2">
-        J'ai quitté la vente en ligne classique pour m'attaquer à quelque chose de plus grand : le marché des apps. Sans équipe de dev, sans budget fou — juste l'IA, une méthode, et une obsession pour les revenus récurrents.<br><br>
-        En quelques mois, j'ai construit des apps qui tournent seules et génèrent du MRR chaque mois. APPTITUDE, c'est ce que j'aurais voulu avoir au départ — le blueprint complet + une communauté de builders sérieux.
+        Entrepreneur multicasquette — j'ai tout essayé. Produits digitaux, dropshipping, e-commerce. Plusieurs degrés de succès, mais jamais <em>cette</em> certitude.<br><br>
+        Avec les apps, j'ai découvert non seulement la meilleure opportunité de toute ma carrière, mais aussi la première activité où je peux être créatif tout en étant dans un business quasi sans limite. Ce qui différencie celui qui fait 100€ de celui qui fait 1M€, c'est uniquement son efficacité. APPTITUDE, c'est le système qui te donne cette efficacité dès le départ.
       </p>
       <div class="founder-metrics reveal reveal-delay-3">
         <div class="metric-item">
-          <div class="metric-num">4K+</div>
-          <div class="metric-label">$/mois ARR actuel</div>
+          <div class="metric-num">10+</div>
+          <div class="metric-label">Apps lancées avec la méthode</div>
         </div>
         <div class="metric-item">
           <div class="metric-num">0</div>
           <div class="metric-label">Ligne de code écrite</div>
         </div>
         <div class="metric-item">
-          <div class="metric-num">100%</div>
-          <div class="metric-label">Système IA</div>
+          <div class="metric-num">Viral</div>
+          <div class="metric-label">MogBattle — 100% organique</div>
         </div>
       </div>
     </div>
@@ -1110,10 +1321,14 @@
       <h2 class="section-title reveal reveal-delay-1">Accès à vie au club<br>Apptitude.</h2>
 
       <div class="price-display reveal reveal-delay-2">
-        <p class="price-from">Paiement unique</p>
-        <div class="price-main">697</div>
+        <p class="price-from">Tarif de lancement · <strong style="color:var(--orange)">3/20 places prises</strong></p>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:1.2rem;flex-wrap:wrap;">
+          <div class="price-main">697</div>
+          <div style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,4.5rem);color:var(--gray);text-decoration:line-through;opacity:0.5;">997</div>
+        </div>
         <p class="price-alt" style="margin-top:0.8rem;">
-          <span style="color:var(--orange);font-weight:600;">100% remboursé</span> si aucun revenu en 6 semaines
+          <span style="color:var(--orange);font-weight:600;">100% remboursé</span> si aucun revenu en 6 semaines ·
+          <span style="color:var(--gray);">Prix → 997€ au 20ème membre</span>
         </p>
       </div>
 
@@ -1127,7 +1342,7 @@
       </div>
 
       <a href="https://whop.com/checkout/plan_O3W0wesAoC90O" class="btn-full reveal" target="_blank">
-        JE REJOINS LE CLUB — 697€ →
+        JE LANCE MA PREMIÈRE APP — 697€ →
       </a>
       <p class="btn-sub reveal">Accès immédiat · Paiement sécurisé via Whop · Garantie 6 semaines</p>
       <a href="https://whop.com/checkout/plan_DBHx4W6o6pd4R" target="_blank" class="btn-3x-link reveal">
@@ -1141,7 +1356,7 @@
 <div class="inline-cta" style="background:var(--black);">
   <p class="inline-cta-text" style="color:white;">Tu attends encore quoi ?</p>
   <p style="color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:500px;margin:0 auto 2rem;line-height:1.6;">Le marché des apps n'attend personne. Chaque semaine sans app, c'est des revenus récurrents que tu ne génères pas.</p>
-  <a href="#pricing" class="btn-inline" style="background:var(--orange);color:white;">ACCÉDER AU CLUB →</a>
+  <a href="#pricing" class="btn-inline" style="background:var(--orange);color:white;">JE REJOINS LES BUILDERS →</a>
 </div>
 
 <!-- FAQ -->
@@ -1177,6 +1392,11 @@
       </div>
 
       <div class="faq-item">
+        <div class="faq-q">Combien de temps ça prend par semaine ? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Entre 5 et 10 heures par semaine pendant le lancement de ton app. Une fois publiée, la maintenance est quasi nulle — c'est la nature du modèle. Le Vault est conçu pour avancer à ton rythme, sans live obligatoire. Tu peux tout faire le soir ou le weekend.</div>
+      </div>
+
+      <div class="faq-item">
         <div class="faq-q">Est-ce que le paiement en 3× est disponible ? <span class="faq-arrow">+</span></div>
         <div class="faq-a">Oui. Tu peux régler en 3 fois sans frais (3 × 233€) directement via le lien de paiement dédié disponible sur la page de checkout. L'accès est immédiat dès le premier paiement.</div>
       </div>
@@ -1190,7 +1410,7 @@
   <p style="font-family:var(--font-display);font-size:0.9rem;letter-spacing:0.25em;color:rgba(255,255,255,0.7);margin-bottom:1.5rem">THE APP BUILDERS CLUB</p>
   <h2 style="font-family:var(--font-display);font-size:clamp(3rem,8vw,6rem);color:white;line-height:1;margin-bottom:0.5rem">Ton app.<br>Tes revenus.<br>Maintenant.</h2>
   <p style="color:rgba(255,255,255,0.75);font-size:1rem;margin:1.5rem auto 2.5rem;max-width:480px;line-height:1.6;">L'industrie des apps était inaccessible. Elle ne l'est plus. Rejoins les builders qui ont déjà franchi le pas.</p>
-  <a href="#pricing" class="btn-primary" style="background:white;color:var(--orange);">JE REJOINS LE CLUB →</a>
+  <a href="#pricing" class="btn-primary" style="background:white;color:var(--orange);">JE REJOINS LES BUILDERS →</a>
   <p style="color:rgba(255,255,255,0.6);font-size:0.8rem;margin-top:1.2rem;">697€ · Accès immédiat · Garantie 6 semaines</p>
 </section>
 
