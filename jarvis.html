@@ -440,23 +440,16 @@ function execTool(name, args) {
 async function loadLocalModel(modelId, onProgress) {
   const { pipeline } = await import(HF_CDN);
 
-  // Detect WebGPU
-  let device = 'wasm';
-  try {
-    if (navigator.gpu) {
-      const adapter = await navigator.gpu.requestAdapter();
-      if (adapter) device = 'webgpu';
-    }
-  } catch(e) {}
-
+  // WASM + q4: most compatible across all Chromebook Chrome versions
+  // q4f16/WebGPU causes Float16Array errors on many Chromebook GPU drivers
   localPipe = await pipeline('text-generation', modelId, {
-    device,
-    dtype: device==='webgpu' ? 'q4f16' : 'q4',
+    device: 'wasm',
+    dtype: 'q4',
     progress_callback: onProgress || (()=>{})
   });
 
   lss('aria_local_model', modelId);
-  return device;
+  return 'wasm';
 }
 
 async function runLocalStreaming(userText) {
