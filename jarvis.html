@@ -214,7 +214,9 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
       <button class="tb" data-t="groq">Groq</button>
       <button class="tb" data-t="openai">OpenAI</button>
     </div>
-    <div id="h-openrouter" class="hint">Best free option. → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> → Sign up free → <strong>Create Key</strong> → Copy. Runs Gemini 2.0 Flash free, no credit card, no hard quota.</div>
+    <div id="h-openrouter" class="hint">Best free option. → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> → Sign up free → <strong>Create Key</strong> → Copy. No credit card required.<br><br>
+    <label style="font-size:.75rem;font-weight:600;display:block;margin-bottom:.3rem;color:var(--text)">Free model:</label>
+    <select id="orModel" style="width:100%;background:var(--white);border:1.5px solid var(--border2);border-radius:8px;padding:.4rem .6rem;font-family:var(--mono);font-size:.75rem;color:var(--text);outline:none;cursor:pointer"></select></div>
     <div id="h-gemini" class="hint hidden">→ <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key → Create key in new project</strong> (important: new project = free tier)</div>
     <div id="h-groq" class="hint hidden">→ <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → <strong>API Keys → Create New Key</strong></div>
     <div id="h-openai" class="hint hidden">→ <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys → Create new secret key</strong></div>
@@ -322,8 +324,13 @@ const GEMINI_URL  = k => `https://generativelanguage.googleapis.com/v1beta/model
 const GROQ_URL    = 'https://api.groq.com/openai/v1/chat/completions';
 const OAI_URL     = 'https://api.openai.com/v1/chat/completions';
 const OR_URL      = 'https://openrouter.ai/api/v1/chat/completions';
-// Free models on OpenRouter (no credit card, no hard quota)
-const OR_MODEL    = 'google/gemini-2.0-flash-exp:free';
+const OR_MODELS   = [
+  {id:'deepseek/deepseek-r1-0528:free',     label:'DeepSeek R1 — Free ★'},
+  {id:'deepseek/deepseek-chat-v3-0324:free',label:'DeepSeek V3 — Free'},
+  {id:'meta-llama/llama-4-maverick:free',   label:'Llama 4 Maverick — Free'},
+  {id:'google/gemma-3-27b-it:free',         label:'Gemma 3 27B — Free'},
+  {id:'mistralai/mistral-7b-instruct:free', label:'Mistral 7B — Free'},
+];
 
 // ── State ──────────────────────────────────────────────────────────────────
 let provider = ls('aria_provider') || 'openrouter';
@@ -537,7 +544,8 @@ async function getResponse(userText) {
   const display = getMsgs();
 
   if (provider === 'openrouter') {
-    return callOpenAI([...display, {role:'user',text:userText}], OR_URL, OR_MODEL,
+    const model = ls('aria_or_model') || OR_MODELS[0].id;
+    return callOpenAI([...display, {role:'user',text:userText}], OR_URL, model,
       {'HTTP-Referer':'https://apptitude.app','X-Title':'ARIA'});
   }
   if (provider === 'groq') {
@@ -697,6 +705,17 @@ function setProcessing(on, txt) {
 }
 
 // ── Setup ──────────────────────────────────────────────────────────────────
+// Populate OpenRouter model dropdown
+function buildORDropdown() {
+  const sel = document.getElementById('orModel');
+  if (!sel) return;
+  const saved = ls('aria_or_model') || OR_MODELS[0].id;
+  sel.innerHTML = OR_MODELS.map(m =>
+    `<option value="${m.id}" ${m.id===saved?'selected':''}>${m.label}</option>`
+  ).join('');
+  sel.addEventListener('change', () => lss('aria_or_model', sel.value));
+}
+
 document.querySelectorAll('.tb').forEach(b => b.addEventListener('click', () => {
   document.querySelectorAll('.tb').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');
@@ -902,6 +921,7 @@ function buildGhost() {
 // ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   buildGhost();
+  buildORDropdown();
   // Pre-select provider tab
   document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.t===provider));
   document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
