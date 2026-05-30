@@ -3,256 +3,287 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>ARIA — Apptitude Revenue Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg0:#030508;--bg1:#08101a;--bg2:#0d1828;
-  --card:rgba(6,14,28,0.88);
-  --cyan:#00d4ff;--cdim:rgba(0,212,255,0.14);
-  --blue:#1a6aff;--gold:#ffc840;--red:#ff4060;--green:#00ff88;
-  --txt:#c8daf0;--dim:#3a5a7a;
-  --border:rgba(0,200,255,0.11);
-  --gs:0 0 14px rgba(0,212,255,0.28);
-  --gm:0 0 32px rgba(0,212,255,0.35);
-  --gl:0 0 64px rgba(0,212,255,0.22);
-  --r:10px;
-  --ui:'Rajdhani',sans-serif;
-  --mono:'Share Tech Mono',monospace;
-  --body:'Exo 2',sans-serif;
+  --red:#E8001D;--orange:#FF6200;--yellow:#FFD000;
+  --fire:linear-gradient(135deg,var(--yellow),var(--orange),var(--red));
+  --bg:#F7F5F3;--white:#FFFFFF;
+  --text:#111111;--mid:#555555;--dim:#AAAAAA;
+  --border:rgba(232,0,29,0.1);--border2:rgba(0,0,0,0.06);
+  --shadow:0 2px 20px rgba(0,0,0,0.07);
+  --glow:0 0 30px rgba(232,0,29,0.18);
+  --r:12px;
+  --ui:'Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
 }
-html,body{height:100%;font-family:var(--body);background:var(--bg0);color:var(--txt);overflow:hidden}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.035) 2px,rgba(0,0,0,.035) 4px);pointer-events:none;z-index:9999}
+html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
 .hidden{display:none!important}
 
-/* ── Modal ── */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(10px)}
-.mc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2.8rem 2.4rem;width:min(460px,94vw);text-align:center;box-shadow:var(--gl),inset 0 0 80px rgba(0,212,255,.025)}
-.mc h1{font-family:var(--ui);font-size:2.6rem;font-weight:700;color:var(--cyan);letter-spacing:.3em;text-shadow:var(--gm);margin:1.1rem 0 .25rem}
-.mc .sub{font-family:var(--mono);font-size:.66rem;color:var(--dim);letter-spacing:.18em;margin-bottom:1.6rem}
-.mc .desc{color:var(--dim);font-size:.88rem;margin-bottom:1.3rem}
-.tabs{display:flex;gap:.45rem;justify-content:center;margin-bottom:.9rem}
-.tb{background:transparent;border:1px solid var(--border);color:var(--dim);padding:.38rem .95rem;border-radius:6px;cursor:pointer;font-family:var(--ui);font-size:.82rem;letter-spacing:.07em;transition:all .18s}
-.tb.on,.tb:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cdim);box-shadow:var(--gs)}
-.hint{font-size:.8rem;color:var(--dim);background:rgba(0,212,255,.055);border:1px solid var(--border);border-radius:6px;padding:.55rem .9rem;margin-bottom:.9rem}
-.hint a,.hint strong{color:var(--cyan)}
-.api-in{width:100%;background:rgba(0,212,255,.045);border:1px solid var(--border);border-radius:var(--r);color:var(--txt);padding:.78rem 1rem;font-family:var(--mono);font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:.9rem}
-.api-in:focus{border-color:var(--cyan);box-shadow:var(--gs)}
-.go{width:100%;background:linear-gradient(135deg,#004d99,#002266);border:1px solid var(--cyan);color:var(--cyan);font-family:var(--ui);font-size:.98rem;font-weight:600;letter-spacing:.2em;padding:.82rem;border-radius:var(--r);cursor:pointer;transition:all .2s;box-shadow:var(--gs)}
-.go:hover{background:linear-gradient(135deg,#0060bb,#003388);box-shadow:var(--gm);transform:translateY(-1px)}
-.go:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.err{color:var(--red);font-size:.82rem;margin-top:.7rem}
+/* ── Ghost background text (Apptitude brand) ─────────────────────────────── */
+.ghost-bg{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;gap:.6rem;pointer-events:none;z-index:0;overflow:hidden;padding:2rem}
+.ghost-row{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;letter-spacing:.25em;color:rgba(0,0,0,0.048);white-space:nowrap;user-select:none}
 
-/* ── Arc reactor ── */
-.arc{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
-.arc.md{width:70px;height:70px;background:radial-gradient(circle,rgba(0,212,255,.28) 0%,transparent 72%);border:2px solid rgba(0,212,255,.55);box-shadow:0 0 22px rgba(0,212,255,.5),inset 0 0 22px rgba(0,212,255,.18);animation:rpulse 2.2s ease-in-out infinite;margin:0 auto .9rem}
-.arc.md::before{content:'';position:absolute;width:48px;height:48px;border-radius:50%;border:1px solid rgba(0,212,255,.38);animation:rspin 3.2s linear infinite}
-.arc.md::after{content:'';position:absolute;width:28px;height:28px;border-radius:50%;background:rgba(0,212,255,.18);border:2px solid rgba(0,212,255,.75);box-shadow:0 0 14px rgba(0,212,255,.75)}
-.arc.sm{width:19px;height:19px;background:radial-gradient(circle,rgba(0,212,255,.55) 0%,transparent 72%);border:1px solid rgba(0,212,255,.75);box-shadow:0 0 9px rgba(0,212,255,.6);animation:rpulse 2.2s ease-in-out infinite}
-@keyframes rpulse{0%,100%{box-shadow:0 0 20px rgba(0,212,255,.45),inset 0 0 18px rgba(0,212,255,.18)}50%{box-shadow:0 0 38px rgba(0,212,255,.78),inset 0 0 28px rgba(0,212,255,.28)}}
-@keyframes rspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+/* ── Orb (Apptitude brand orb) ───────────────────────────────────────────── */
+.bg-orb{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle at 38% 62%,rgba(255,208,0,.22) 0%,rgba(255,98,0,.26) 38%,rgba(232,0,29,.2) 68%,transparent 100%);filter:blur(90px);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;animation:orbFloat 14s ease-in-out infinite;transition:filter .6s,opacity .6s}
+.orb-active .bg-orb{filter:blur(70px);opacity:1.4;animation-duration:3s}
+@keyframes orbFloat{0%,100%{transform:translate(-50%,-50%) scale(1)}33%{transform:translate(-48%,-53%) scale(1.04)}66%{transform:translate(-52%,-47%) scale(.97)}}
 
-/* ── App shell ── */
-#app{display:flex;flex-direction:column;height:100vh}
+/* ── Setup modal ──────────────────────────────────────────────────────────── */
+.modal{position:fixed;inset:0;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(16px)}
+.mc{background:var(--white);border:1px solid var(--border2);border-radius:20px;padding:3rem 2.5rem;width:min(460px,94vw);text-align:center;box-shadow:0 8px 60px rgba(0,0,0,0.1),0 0 0 1px var(--border)}
+.setup-orb{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 38% 68%,var(--yellow),var(--orange) 48%,var(--red));filter:blur(4px);box-shadow:0 0 28px rgba(232,0,29,.38);margin:0 auto 1.4rem;animation:sPulse 2.2s ease-in-out infinite}
+@keyframes sPulse{0%,100%{box-shadow:0 0 28px rgba(232,0,29,.35)}50%{box-shadow:0 0 48px rgba(255,98,0,.55)}}
+.mc h1{font-size:2rem;font-weight:900;letter-spacing:-.02em;color:var(--text);margin-bottom:.2rem}
+.mc h1 span{background:var(--fire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.mc .sub{font-family:var(--mono);font-size:.62rem;color:var(--dim);letter-spacing:.18em;margin-bottom:1.6rem;text-transform:uppercase}
+.mc .desc{color:var(--mid);font-size:.86rem;margin-bottom:1.3rem;line-height:1.55}
+.tabs{display:flex;gap:.4rem;justify-content:center;margin-bottom:.85rem}
+.tb{background:transparent;border:1px solid var(--border2);color:var(--mid);padding:.36rem .9rem;border-radius:6px;cursor:pointer;font-family:var(--ui);font-size:.78rem;font-weight:500;transition:all .18s}
+.tb.on,.tb:hover{border-color:var(--red);color:var(--red);background:rgba(232,0,29,.05)}
+.hint{font-size:.78rem;color:var(--mid);background:rgba(232,0,29,.04);border:1px solid var(--border);border-radius:8px;padding:.55rem .9rem;margin-bottom:.85rem;line-height:1.5}
+.hint a{color:var(--red);font-weight:600;text-decoration:none}
+.api-in{width:100%;background:rgba(0,0,0,.025);border:1.5px solid var(--border2);border-radius:var(--r);color:var(--text);padding:.76rem 1rem;font-family:var(--mono);font-size:.84rem;outline:none;transition:border-color .2s;margin-bottom:.85rem}
+.api-in:focus{border-color:var(--red)}
+.go{width:100%;background:var(--red);color:#fff;font-family:var(--ui);font-size:.9rem;font-weight:700;letter-spacing:.06em;padding:.8rem;border-radius:var(--r);cursor:pointer;border:none;transition:all .2s}
+.go:hover{background:#c8001a;transform:translateY(-1px);box-shadow:0 6px 24px rgba(232,0,29,.3)}
+.go:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.err{color:var(--red);font-size:.8rem;margin-top:.6rem;font-family:var(--mono)}
 
-/* ── Header ── */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:.58rem 1.1rem;background:linear-gradient(180deg,rgba(0,25,55,.96),rgba(0,12,28,.93));border-bottom:1px solid var(--border);box-shadow:0 2px 22px rgba(0,0,0,.5);flex-shrink:0;z-index:10}
-.hl{display:flex;align-items:center;gap:.65rem}
-.logo{font-family:var(--ui);font-size:1.25rem;font-weight:700;color:var(--cyan);letter-spacing:.3em;text-shadow:var(--gs)}
-.vtag{font-family:var(--mono);font-size:.6rem;color:var(--dim);border:1px solid var(--border);padding:.13rem .48rem;border-radius:4px;letter-spacing:.09em}
-.si{display:flex;gap:.9rem}
-.ind{display:flex;align-items:center;gap:.38rem;font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:.07em}
-.dot{width:7px;height:7px;border-radius:50%;animation:blink 2.1s ease-in-out infinite}
-.dot.g{background:var(--green);box-shadow:0 0 8px var(--green)}
-.dot.b{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
-.dot.y{background:var(--gold);box-shadow:0 0 8px var(--gold)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.38}}
-.hr2{display:flex;gap:.45rem}
-.ic{background:transparent;border:1px solid var(--border);color:var(--dim);width:31px;height:31px;border-radius:6px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .18s}
-.ic:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:var(--gs)}
-.ic.on{border-color:var(--cyan);color:var(--cyan)}
+/* ── App shell ───────────────────────────────────────────────────────────── */
+#app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1}
 
-/* ── Body ── */
-.body{display:flex;flex:1;overflow:hidden}
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.4rem;background:rgba(255,255,255,.88);border-bottom:1px solid var(--border2);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-shrink:0;z-index:10}
+.hl{display:flex;align-items:center;gap:.9rem}
+.aria-badge{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(3px);box-shadow:0 0 14px rgba(232,0,29,.4);animation:sPulse 2.2s ease-in-out infinite;flex-shrink:0}
+.logo{display:flex;flex-direction:column;gap:.05rem}
+.logo-main{font-size:1.1rem;font-weight:900;letter-spacing:-.01em;line-height:1}
+.logo-main span{background:var(--fire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-family:var(--mono);font-size:.52rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+.si{display:flex;gap:1.1rem}
+.ind{display:flex;align-items:center;gap:.38rem;font-family:var(--mono);font-size:.6rem;color:var(--mid);letter-spacing:.07em}
+.dot{width:6px;height:6px;border-radius:50%;animation:blink 2.2s ease-in-out infinite}
+.dot.g{background:#22C55E;box-shadow:0 0 7px #22C55E}
+.dot.r{background:var(--red);box-shadow:0 0 7px var(--red)}
+.dot.o{background:var(--orange);box-shadow:0 0 7px var(--orange)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hr2{display:flex;gap:.4rem}
+.ic{background:transparent;border:1.5px solid var(--border2);color:var(--mid);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.ic:hover{border-color:var(--red);color:var(--red);background:rgba(232,0,29,.05)}
+.ic.on{border-color:var(--red);color:var(--red);background:rgba(232,0,29,.06)}
 
-/* ── Chat ── */
-.chat{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.msgs{flex:1;overflow-y:auto;padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.msg{display:flex;gap:.75rem;max-width:90%;animation:min .22s ease-out}
-@keyframes min{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+/* ── Body ─────────────────────────────────────────────────────────────────── */
+.body{display:flex;flex:1;overflow:hidden;position:relative}
+
+/* ── Chat ────────────────────────────────────────────────────────────────── */
+.chat{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
+.msgs{flex:1;overflow-y:auto;padding:1.4rem;display:flex;flex-direction:column;gap:1rem;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.08) transparent}
+.msg{display:flex;gap:.75rem;max-width:88%;animation:msgIn .25s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .msg.u{flex-direction:row-reverse;align-self:flex-end}
-.msg.j{align-self:flex-start}
-.av{width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ui);font-size:.82rem;font-weight:700;flex-shrink:0}
-.j .av{background:linear-gradient(135deg,#002255,#004488);border:1px solid var(--cyan);color:var(--cyan);box-shadow:var(--gs)}
-.u .av{background:linear-gradient(135deg,#181830,#141428);border:1px solid rgba(255,255,255,.13);color:#888}
+.msg.a{align-self:flex-start}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ui);font-size:.7rem;font-weight:700;flex-shrink:0}
+.a .av{background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(2.5px);box-shadow:0 0 12px rgba(232,0,29,.35);animation:sPulse 2.2s ease-in-out infinite}
+.u .av{background:rgba(0,0,0,.06);border:1.5px solid rgba(0,0,0,.1);color:var(--mid);font-size:.62rem;letter-spacing:.04em}
 .mc2{display:flex;flex-direction:column;gap:.28rem}
-.mt{padding:.72rem .95rem;border-radius:var(--r);font-size:.9rem;line-height:1.68}
-.j .mt{background:var(--card);border:1px solid var(--border);border-top-left-radius:2px;box-shadow:var(--gs)}
-.u .mt{background:linear-gradient(135deg,rgba(0,55,110,.7),rgba(0,38,90,.7));border:1px solid rgba(0,140,255,.2);border-top-right-radius:2px;text-align:right}
-.ts{font-family:var(--mono);font-size:.6rem;color:var(--dim);padding:0 .28rem}
+.mt{padding:.8rem 1.05rem;border-radius:var(--r);font-size:.875rem;line-height:1.7;position:relative}
+.a .mt{background:var(--white);border:1px solid var(--border2);border-top-left-radius:3px;box-shadow:var(--shadow)}
+.u .mt{background:linear-gradient(135deg,rgba(232,0,29,.08),rgba(255,98,0,.07));border:1px solid rgba(232,0,29,.14);border-top-right-radius:3px;text-align:right}
+.ts{font-family:var(--mono);font-size:.58rem;color:var(--dim);padding:0 .25rem}
 .u .ts{text-align:right}
 /* Markdown */
-.mt h1,.mt h2,.mt h3{color:var(--cyan);margin:.75rem 0 .38rem;font-family:var(--ui);font-weight:600}
-.mt h1{font-size:1.12rem}.mt h2{font-size:1rem}.mt h3{font-size:.92rem}
-.mt p{margin:.38rem 0}
-.mt ul,.mt ol{padding-left:1.35rem;margin:.38rem 0}
-.mt li{margin:.22rem 0}
-.mt code{font-family:var(--mono);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.14);padding:.08em .38em;border-radius:4px;font-size:.85em;color:var(--cyan)}
-.mt pre{background:rgba(0,0,0,.42);border:1px solid var(--border);border-radius:7px;padding:.75rem 1rem;overflow-x:auto;margin:.55rem 0}
-.mt pre code{background:none;border:none;padding:0;color:var(--txt)}
-.mt table{width:100%;border-collapse:collapse;margin:.55rem 0;font-size:.85rem}
-.mt th,.mt td{border:1px solid var(--border);padding:.38rem .65rem;text-align:left}
-.mt th{background:var(--cdim);color:var(--cyan);font-family:var(--ui)}
-.mt strong{color:var(--cyan)}.mt a{color:var(--cyan)}
-.mt blockquote{border-left:3px solid var(--cyan);padding-left:.8rem;color:var(--dim);margin:.4rem 0}
-/* Tool use notification */
-.tool-note{font-family:var(--mono);font-size:.7rem;color:var(--dim);background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.1);border-radius:5px;padding:.3rem .7rem;margin:.3rem 0;display:inline-block}
+.mt h1,.mt h2,.mt h3{font-weight:700;margin:.8rem 0 .35rem;letter-spacing:-.01em}
+.mt h1{font-size:1.08rem;color:var(--red)}.mt h2{font-size:.98rem;color:var(--text)}.mt h3{font-size:.9rem;color:var(--text)}
+.mt p{margin:.35rem 0}
+.mt ul,.mt ol{padding-left:1.35rem;margin:.35rem 0}
+.mt li{margin:.2rem 0}
+.mt code{font-family:var(--mono);background:rgba(232,0,29,.07);border:1px solid rgba(232,0,29,.12);padding:.08em .36em;border-radius:4px;font-size:.82em;color:var(--red)}
+.mt pre{background:rgba(0,0,0,.04);border:1px solid var(--border2);border-radius:8px;padding:.75rem 1rem;overflow-x:auto;margin:.5rem 0}
+.mt pre code{background:none;border:none;padding:0;color:var(--text);font-size:.82rem}
+.mt table{width:100%;border-collapse:collapse;margin:.5rem 0;font-size:.84rem}
+.mt th,.mt td{border:1px solid var(--border2);padding:.36rem .65rem;text-align:left}
+.mt th{background:rgba(232,0,29,.04);color:var(--text);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.mt strong{color:var(--red);font-weight:600}
+.mt a{color:var(--red);font-weight:500}
+.mt blockquote{border-left:3px solid var(--red);padding-left:.8rem;color:var(--mid);margin:.4rem 0;font-style:italic}
+.mt hr{border:none;border-top:1px solid var(--border2);margin:.6rem 0}
+/* Tool notification pill */
+.tool-pill{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.62rem;color:var(--orange);background:rgba(255,98,0,.07);border:1px solid rgba(255,98,0,.18);border-radius:20px;padding:.2rem .65rem;margin:.25rem 0}
 /* Typing */
-.typing{display:flex;align-items:center;gap:.75rem;padding:0 1.1rem 1rem}
-.td{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:.65rem .95rem;display:flex;gap:.38rem;align-items:center}
-.td span{width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:bounce .85s ease-in-out infinite;opacity:.6}
-.td span:nth-child(2){animation-delay:.14s}
-.td span:nth-child(3){animation-delay:.28s}
+.typing{display:flex;align-items:center;gap:.75rem;padding:0 1.4rem 1rem}
+.typing-orb{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(4px);box-shadow:0 0 18px rgba(232,0,29,.5);animation:sPulse 1s ease-in-out infinite;flex-shrink:0}
+.typing-inner{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);padding:.6rem .95rem;display:flex;align-items:center;gap:.55rem;box-shadow:var(--shadow)}
+.tdots span{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:bounce .85s ease-in-out infinite;opacity:.7;display:inline-block;margin:0 1.5px}
+.tdots span:nth-child(2){animation-delay:.14s}.tdots span:nth-child(3){animation-delay:.28s}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px);opacity:1}}
-.pt{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.1em}
+.pt{font-family:var(--mono);font-size:.65rem;color:var(--mid);letter-spacing:.08em}
 
-/* ── Sidebar ── */
-.sb{width:272px;background:linear-gradient(180deg,rgba(0,12,26,.97),rgba(0,8,18,.99));border-left:1px solid var(--border);display:flex;flex-direction:column;transition:width .24s ease;overflow:hidden}
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
+.sb{width:268px;background:rgba(255,255,255,.9);border-left:1px solid var(--border2);display:flex;flex-direction:column;transition:width .28s cubic-bezier(.4,0,.2,1);overflow:hidden;backdrop-filter:blur(12px)}
 .sb.closed{width:0;border-left:none}
-.stabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.stab{flex:1;background:transparent;border:none;border-right:1px solid var(--border);color:var(--dim);padding:.52rem;font-family:var(--ui);font-size:.7rem;font-weight:600;letter-spacing:.1em;cursor:pointer;transition:all .18s}
-.stab:last-child{border-right:none}
-.stab.on,.stab:hover{background:var(--cdim);color:var(--cyan)}
-.sc{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.stabs{display:flex;border-bottom:1px solid var(--border2);flex-shrink:0}
+.stab{flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--mid);padding:.55rem;font-family:var(--ui);font-size:.68rem;font-weight:600;letter-spacing:.08em;cursor:pointer;transition:all .18s;text-transform:uppercase;position:relative}
+.stab .badge{position:absolute;top:4px;right:6px;background:var(--red);color:#fff;border-radius:10px;font-size:.5rem;padding:.06rem .32rem;font-family:var(--mono);line-height:1.6;font-weight:700;opacity:0;transition:opacity .2s}
+.stab .badge.show{opacity:1}
+.stab.on{color:var(--red);border-bottom-color:var(--red);background:rgba(232,0,29,.03)}
+.stab:hover:not(.on){color:var(--text);background:rgba(0,0,0,.02)}
+.sc{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.06) transparent}
 .sc.h{display:none}
-.shdr{display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;font-family:var(--mono);font-size:.62rem;color:var(--dim);letter-spacing:.1em;border-bottom:1px solid var(--border);flex-shrink:0}
-.mb{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:.88rem;transition:color .18s}
-.mb:hover{color:var(--cyan)}
-.il{padding:.45rem;display:flex;flex-direction:column;gap:.38rem}
-.ni,.ti{background:rgba(0,212,255,.038);border:1px solid var(--border);border-radius:6px;padding:.55rem .75rem;cursor:pointer;transition:all .18s}
-.ni:hover,.ti:hover{border-color:var(--cyan);background:var(--cdim)}
-.it{font-family:var(--ui);font-size:.8rem;font-weight:500;color:var(--txt);margin-bottom:.18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.im{font-family:var(--mono);font-size:.6rem;color:var(--dim);display:flex;align-items:center;justify-content:space-between}
-.cat{background:var(--cdim);border:1px solid rgba(0,212,255,.18);color:var(--cyan);border-radius:3px;padding:.04rem .32rem;font-size:.58rem}
-.doneBtn{background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:4px;padding:.08rem .38rem;font-size:.62rem;cursor:pointer;transition:all .18s}
-.doneBtn:hover{border-color:var(--green);color:var(--green)}
-.hi{padding:.45rem .75rem;border-bottom:1px solid rgba(255,255,255,.035);font-size:.8rem;color:var(--dim);cursor:pointer;transition:background .18s}
-.hi:hover{background:rgba(255,255,255,.035)}
-.hr{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;margin-bottom:.12rem}
-.hr.u{color:#4a9eff}.hr.a{color:var(--cyan)}
-.ht{font-size:.78rem;line-height:1.38;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shdr{display:flex;align-items:center;justify-content:space-between;padding:.55rem .85rem;font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:.12em;border-bottom:1px solid var(--border2);text-transform:uppercase}
+.mb{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:.85rem;transition:color .18s;padding:.15rem .3rem;border-radius:4px}
+.mb:hover{color:var(--red)}
+.il{padding:.5rem;display:flex;flex-direction:column;gap:.35rem}
+.ni,.ti{background:var(--white);border:1px solid var(--border2);border-radius:8px;padding:.55rem .75rem;cursor:pointer;transition:all .18s}
+.ni:hover,.ti:hover{border-color:var(--red);box-shadow:0 2px 12px rgba(232,0,29,.1);transform:translateY(-1px)}
+.it{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:.18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.im{font-family:var(--mono);font-size:.58rem;color:var(--dim);display:flex;align-items:center;justify-content:space-between}
+.cat{background:rgba(232,0,29,.07);color:var(--red);border-radius:4px;padding:.04rem .3rem;font-size:.57rem;font-weight:600}
+.doneBtn{background:transparent;border:1.5px solid rgba(0,0,0,.1);color:var(--mid);border-radius:5px;padding:.08rem .36rem;font-size:.6rem;cursor:pointer;transition:all .18s;font-family:var(--mono)}
+.doneBtn:hover{border-color:#22C55E;color:#22C55E}
+.hi{padding:.5rem .85rem;border-bottom:1px solid rgba(0,0,0,.035);font-size:.8rem;color:var(--mid);cursor:pointer;transition:background .15s}
+.hi:hover{background:rgba(0,0,0,.025)}
+.hr-role{font-family:var(--mono);font-size:.57rem;letter-spacing:.08em;margin-bottom:.1rem;font-weight:600}
+.hr-role.u{color:var(--red)}.hr-role.a{color:var(--orange)}
+.ht{font-size:.78rem;line-height:1.38;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 
-/* ── Input ── */
-.inp-area{background:linear-gradient(0deg,rgba(0,12,26,.99),rgba(0,8,18,.96));border-top:1px solid var(--border);padding:.75rem .95rem .6rem;flex-shrink:0}
-.inp-box{display:flex;align-items:flex-end;gap:.45rem;background:rgba(0,212,255,.038);border:1px solid var(--border);border-radius:12px;padding:.48rem .55rem;transition:border-color .2s,box-shadow .2s}
-.inp-box:focus-within{border-color:rgba(0,212,255,.38);box-shadow:var(--gs)}
-.ibtn{background:transparent;border:none;color:var(--dim);font-size:1.08rem;cursor:pointer;padding:.32rem;border-radius:6px;transition:all .18s;flex-shrink:0;display:flex;align-items:center}
-.ibtn:hover{color:var(--cyan);background:var(--cdim)}
+/* ── Input ───────────────────────────────────────────────────────────────── */
+.inp-area{background:rgba(255,255,255,.92);border-top:1px solid var(--border2);padding:.8rem 1.1rem .65rem;flex-shrink:0;backdrop-filter:blur(16px)}
+.inp-box{display:flex;align-items:flex-end;gap:.45rem;background:var(--white);border:1.5px solid var(--border2);border-radius:14px;padding:.5rem .6rem;transition:border-color .2s,box-shadow .2s;box-shadow:var(--shadow)}
+.inp-box:focus-within{border-color:rgba(232,0,29,.35);box-shadow:0 0 0 3px rgba(232,0,29,.08),var(--shadow)}
+.ibtn{background:transparent;border:none;color:var(--dim);font-size:1rem;cursor:pointer;padding:.32rem;border-radius:6px;transition:all .18s;flex-shrink:0;display:flex;align-items:center}
+.ibtn:hover{color:var(--red);background:rgba(232,0,29,.06)}
 .ibtn.on{color:var(--red)}
-#ui{flex:1;background:transparent;border:none;outline:none;color:var(--txt);font-family:var(--body);font-size:.9rem;line-height:1.52;resize:none;max-height:130px;scrollbar-width:thin}
+#ui{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--ui);font-size:.88rem;line-height:1.55;resize:none;max-height:130px;scrollbar-width:thin}
 #ui::placeholder{color:var(--dim)}
-.sbtn{background:linear-gradient(135deg,#003d80,#001f55);border:1px solid rgba(0,168,255,.38);color:var(--cyan);padding:.42rem .85rem;border-radius:8px;cursor:pointer;font-family:var(--ui);font-size:.78rem;font-weight:600;letter-spacing:.1em;display:flex;align-items:center;gap:.38rem;transition:all .2s;flex-shrink:0}
-.sbtn:hover:not(:disabled){background:linear-gradient(135deg,#0050a0,#002d77);box-shadow:var(--gs)}
-.sbtn:disabled{opacity:.38;cursor:not-allowed}
-.inp-ft{display:flex;align-items:center;justify-content:space-between;margin-top:.32rem;padding:0 .18rem}
-.ihint{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:.05em}
-.vs{font-family:var(--mono);font-size:.62rem;color:var(--red);animation:blink .5s ease-in-out infinite}
+.sbtn{background:var(--red);color:#fff;padding:.45rem .95rem;border-radius:10px;cursor:pointer;font-family:var(--ui);font-size:.78rem;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;gap:.38rem;transition:all .2s;flex-shrink:0;border:none}
+.sbtn:hover:not(:disabled){background:#c8001a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(232,0,29,.35)}
+.sbtn:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
+.inp-ft{display:flex;align-items:center;justify-content:space-between;margin-top:.3rem;padding:0 .2rem}
+.ihint{font-family:var(--mono);font-size:.56rem;color:var(--dim);letter-spacing:.05em}
+.vs{font-family:var(--mono);font-size:.6rem;color:var(--red);animation:blink .5s ease-in-out infinite;font-weight:600}
 
-/* ── Note detail modal ── */
-.nm .mc{max-width:620px;width:94vw;padding:1.4rem 1.8rem;text-align:left}
-.nmhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
-.nmhdr h2{color:var(--cyan);font-family:var(--ui);font-size:1.08rem}
-.nmhdr button{background:transparent;border:none;color:var(--dim);font-size:1.18rem;cursor:pointer;transition:color .18s}
+/* ── Toast ───────────────────────────────────────────────────────────────── */
+#toasts{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.4rem;pointer-events:none}
+.toast{background:var(--white);border:1px solid var(--border2);border-left:3px solid var(--red);padding:.6rem 1rem;border-radius:10px;font-family:var(--mono);font-size:.68rem;color:var(--text);box-shadow:0 4px 24px rgba(0,0,0,.1);transform:translateX(calc(100% + 1rem));transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-width:260px;line-height:1.4}
+.toast.show{transform:translateX(0)}
+.toast.task{border-left-color:var(--orange)}
+.toast.note{border-left-color:var(--red)}
+.toast.fact{border-left-color:#8B5CF6}
+.toast-label{font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.18rem}
+.toast.task .toast-label{color:var(--orange)}
+.toast.note .toast-label{color:var(--red)}
+.toast.fact .toast-label{color:#8B5CF6}
+
+/* ── Note modal ──────────────────────────────────────────────────────────── */
+#nm{background:rgba(255,255,255,.95)}
+#nm .mc{max-width:600px;width:94vw;padding:1.4rem 1.8rem;text-align:left}
+.nmhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--border2)}
+.nmhdr h2{font-size:1rem;font-weight:700;color:var(--text)}
+.nmhdr button{background:transparent;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:.2rem;border-radius:5px;transition:color .18s}
 .nmhdr button:hover{color:var(--red)}
-.nc{font-size:.88rem;line-height:1.7;max-height:68vh;overflow-y:auto;color:var(--txt);white-space:pre-wrap}
+.nc{font-size:.86rem;line-height:1.72;max-height:65vh;overflow-y:auto;color:var(--text);white-space:pre-wrap;font-family:var(--ui)}
 
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,212,255,.13);border-radius:4px}
+/* ── Misc ────────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.09);border-radius:4px}
 </style>
 </head>
 <body>
 
-<!-- Setup -->
+<!-- Ghost text background (Apptitude DA) -->
+<div class="ghost-bg" id="ghostBg" aria-hidden="true"></div>
+
+<!-- Background orb -->
+<div class="bg-orb" id="bgOrb"></div>
+
+<!-- Toast container -->
+<div id="toasts"></div>
+
+<!-- ── Setup modal ──────────────────────────────────────────────────────── -->
 <div id="setup" class="modal">
   <div class="mc">
-    <div class="arc md"></div>
-    <h1>J·A·R·V·I·S</h1>
-    <p class="sub">JUST A RATHER VERY INTELLIGENT SYSTEM</p>
-    <p class="desc">Choose your provider and paste your API key to begin.</p>
+    <div class="setup-orb"></div>
+    <h1><span>ARIA</span></h1>
+    <p class="sub">Apptitude Revenue Intelligence Assistant</p>
+    <p class="desc">Connect your AI provider to activate ARIA. Your data stays in your browser — never on a server.</p>
     <div class="tabs">
       <button class="tb on" data-t="gemini">Gemini — Free</button>
       <button class="tb" data-t="groq">Groq — Free</button>
       <button class="tb" data-t="openai">OpenAI</button>
     </div>
-    <div id="h-gemini" class="hint">Free key in 30 sec → <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key</strong> → Copy</div>
-    <div id="h-groq"   class="hint hidden">Free key → <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → <strong>API Keys → Create</strong></div>
-    <div id="h-openai" class="hint hidden">Key at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys</strong></div>
-    <input class="api-in" id="keyIn" type="password" placeholder="Paste your API key here…" onkeydown="if(event.key==='Enter')boot()">
-    <button class="go" id="goBtn" onclick="boot()">INITIALIZE JARVIS</button>
+    <div id="h-gemini" class="hint">Free key in 30 sec → <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key</strong> → Copy & paste below</div>
+    <div id="h-groq" class="hint hidden">Free key → <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → <strong>API Keys → Create New Key</strong></div>
+    <div id="h-openai" class="hint hidden">Key at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys → Create new secret key</strong></div>
+    <input class="api-in" id="keyIn" type="password" placeholder="Paste your API key…" onkeydown="if(event.key==='Enter')boot()">
+    <button class="go" id="goBtn" onclick="boot()">ACTIVATE ARIA</button>
     <div class="err hidden" id="serr"></div>
   </div>
 </div>
 
-<!-- Main app -->
+<!-- ── Main app ─────────────────────────────────────────────────────────── -->
 <div id="app" class="hidden">
-  <!-- Header -->
   <header class="hdr">
     <div class="hl">
-      <div class="arc sm"></div>
-      <span class="logo">J.A.R.V.I.S</span>
-      <span class="vtag">v2.0 // ENTERPRISE</span>
+      <div class="aria-badge"></div>
+      <div class="logo">
+        <div class="logo-main"><span>ARIA</span></div>
+        <div class="logo-sub">Apptitude Revenue Intelligence</div>
+      </div>
     </div>
     <div class="si">
-      <div class="ind"><div class="dot g"></div><span>AI ONLINE</span></div>
-      <div class="ind"><div class="dot b"></div><span id="mc">— MEM</span></div>
-      <div class="ind"><div class="dot y"></div><span id="tc">— TASKS</span></div>
+      <div class="ind"><div class="dot g"></div><span>ONLINE</span></div>
+      <div class="ind"><div class="dot r"></div><span id="mc">—</span></div>
+      <div class="ind"><div class="dot o"></div><span id="tc">—</span></div>
     </div>
     <div class="hr2">
-      <button class="ic" id="voiceOutBtn" onclick="toggleTTS()" title="Voice Output OFF">🔇</button>
-      <button class="ic" onclick="toggleSidebar()" title="Panel">⊞</button>
-      <button class="ic" onclick="newSession()" title="New Session">↺</button>
-      <button class="ic" onclick="exportChat()" title="Export">↓</button>
-      <button class="ic" onclick="resetKey()" title="Change API Key">⚙</button>
+      <button class="ic" id="voiceOutBtn" onclick="toggleTTS()" title="Voice output OFF">🔇</button>
+      <button class="ic" onclick="toggleSidebar()" title="Toggle panel">⊞</button>
+      <button class="ic" onclick="newSession()" title="New session">↺</button>
+      <button class="ic" onclick="exportChat()" title="Export Markdown">↓</button>
+      <button class="ic" onclick="resetKey()" title="Settings">⚙</button>
     </div>
   </header>
 
-  <!-- Body -->
   <div class="body">
     <!-- Chat -->
     <div class="chat">
       <div class="msgs" id="msgs">
-        <div class="msg j">
-          <div class="av">J</div>
+        <div class="msg a">
+          <div class="av"></div>
           <div class="mc2">
-            <div class="mt">Good day. All systems operational.<br><br>I am JARVIS — your business intelligence system, strategic advisor, and personal AI. I remember everything we discuss, manage your notes and action items, and search for live information when needed.<br><br>How may I be of service, Sir?</div>
-            <div class="ts">JARVIS — System initialised</div>
+            <div class="mt">Let's be clear about what I am.<br><br>I'm <strong>ARIA</strong> — Apptitude's revenue intelligence system. My job is to help you build, grow, and dominate. I'll challenge bad ideas, flag blind spots, and push you toward decisions that move the needle.<br><br>I don't do vague encouragement. I do strategy, numbers, and execution.<br><br>What are we working on?</div>
+            <div class="ts">ARIA — Initialised</div>
           </div>
         </div>
       </div>
       <div class="typing hidden" id="typing">
-        <div class="av">J</div>
-        <div class="td"><span></span><span></span><span></span></div>
-        <span class="pt" id="pt">PROCESSING</span>
+        <div class="typing-orb"></div>
+        <div class="typing-inner">
+          <div class="tdots"><span></span><span></span><span></span></div>
+          <span class="pt" id="pt">PROCESSING</span>
+        </div>
       </div>
     </div>
 
     <!-- Sidebar -->
     <div class="sb" id="sb">
       <div class="stabs">
-        <button class="stab on" onclick="showTab('notes')">NOTES</button>
-        <button class="stab" onclick="showTab('tasks')">TASKS</button>
-        <button class="stab" onclick="showTab('log')">LOG</button>
+        <button class="stab on" onclick="showTab('notes')">Notes<span class="badge" id="note-badge">0</span></button>
+        <button class="stab" onclick="showTab('tasks')">Tasks<span class="badge" id="task-badge">0</span></button>
+        <button class="stab" onclick="showTab('log')">Log</button>
       </div>
       <div id="tab-notes" class="sc">
-        <div class="shdr"><span>INTELLIGENCE FILES</span><button class="mb" onclick="renderNotes()">↻</button></div>
+        <div class="shdr"><span>Intelligence Files</span><button class="mb" onclick="renderNotes()">↻</button></div>
         <div class="il" id="nl"></div>
       </div>
       <div id="tab-tasks" class="sc h">
-        <div class="shdr"><span>ACTION ITEMS</span><button class="mb" onclick="renderTasks()">↻</button></div>
+        <div class="shdr"><span>Action Items</span><button class="mb" onclick="renderTasks()">↻</button></div>
         <div class="il" id="tl"></div>
       </div>
       <div id="tab-log" class="sc h">
-        <div class="shdr"><span>CONVERSATION LOG</span><button class="mb" onclick="renderLog()">↻</button></div>
+        <div class="shdr"><span>Conversation Log</span><button class="mb" onclick="renderLog()">↻</button></div>
         <div class="il" id="ll" style="padding:0"></div>
       </div>
     </div>
@@ -261,10 +292,10 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <!-- Input -->
   <div class="inp-area">
     <div class="inp-box">
-      <button class="ibtn" id="micBtn" onclick="toggleMic()" title="Voice Input">🎙</button>
-      <label class="ibtn" title="Upload file">📎<input type="file" id="fi" accept=".txt,.md,.py,.js,.ts,.json,.csv,.html,.pdf" style="display:none" onchange="uploadFile(event)"></label>
-      <textarea id="ui" rows="1" placeholder="Speak your mind, Sir…" onkeydown="kd(event)" oninput="resize(this)"></textarea>
-      <button class="sbtn" id="sendBtn" onclick="send()"><span>TRANSMIT</span><span>▶</span></button>
+      <button class="ibtn" id="micBtn" onclick="toggleMic()" title="Voice input">🎙</button>
+      <label class="ibtn" title="Upload file for analysis">📎<input type="file" id="fi" accept=".txt,.md,.py,.js,.ts,.json,.csv,.html" style="display:none" onchange="uploadFile(event)"></label>
+      <textarea id="ui" rows="1" placeholder="Ask ARIA anything…" onkeydown="kd(event)" oninput="resize(this)"></textarea>
+      <button class="sbtn" id="sendBtn" onclick="send()">Send ▶</button>
     </div>
     <div class="inp-ft">
       <span class="vs" id="vst"></span>
@@ -273,13 +304,10 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
 </div>
 
-<!-- Note modal -->
-<div id="nm" class="modal nm hidden">
+<!-- Note detail modal -->
+<div id="nm" class="modal hidden">
   <div class="mc">
-    <div class="nmhdr">
-      <h2 id="nmTitle"></h2>
-      <button onclick="closeNote()">✕</button>
-    </div>
+    <div class="nmhdr"><h2 id="nmTitle"></h2><button onclick="closeNote()">✕</button></div>
     <div class="nc" id="nmBody"></div>
   </div>
 </div>
@@ -287,94 +315,90 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <script>
 'use strict';
 
-// ── Constants ──────────────────────────────────────────────────────────────
+// ── API endpoints ──────────────────────────────────────────────────────────
 const GEMINI_URL = k => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`;
 const GROQ_URL   = 'https://api.groq.com/openai/v1/chat/completions';
 const OAI_URL    = 'https://api.openai.com/v1/chat/completions';
 
 // ── State ──────────────────────────────────────────────────────────────────
-let provider = ls('jarvis_provider') || 'gemini';
-let apiKey   = ls('jarvis_key')      || '';
+let provider = ls('aria_provider') || 'gemini';
+let apiKey   = ls('aria_key')      || '';
 let ttsOn    = false;
 let micOn    = false;
 let recog    = null;
 let sbOpen   = true;
+let currentTab = 'notes';
 
-// ── LocalStorage helpers ───────────────────────────────────────────────────
-function ls(k, d)       { try { const v = localStorage.getItem(k); return v != null ? JSON.parse(v) : d; } catch { return d; } }
-function lss(k, v)      { localStorage.setItem(k, JSON.stringify(v)); }
-function lsDel(k)       { localStorage.removeItem(k); }
+// ── LocalStorage ───────────────────────────────────────────────────────────
+function ls(k,d){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):d}catch{return d}}
+function lss(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function lsDel(k){localStorage.removeItem(k)}
+function getMsgs()    {return ls('aria_msgs',[])}
+function saveMsgs(m)  {lss('aria_msgs',m)}
+function getNotes()   {return ls('aria_notes',[])}
+function saveNotes(n) {lss('aria_notes',n)}
+function getTasks()   {return ls('aria_tasks',[])}
+function saveTasks(t) {lss('aria_tasks',t)}
+function getFacts()   {return ls('aria_facts',{})}
+function saveFacts(f) {lss('aria_facts',f)}
+function nextId(arr)  {return arr.length?Math.max(...arr.map(x=>x.id))+1:1}
 
-// ── Persistent data ────────────────────────────────────────────────────────
-function getMsgs()      { return ls('j_msgs', []); }
-function saveMsgs(m)    { lss('j_msgs', m); }
-function getNotes()     { return ls('j_notes', []); }
-function saveNotes(n)   { lss('j_notes', n); }
-function getTasks()     { return ls('j_tasks', []); }
-function saveTasks(t)   { lss('j_tasks', t); }
-function getFacts()     { return ls('j_facts', {}); }
-function saveFacts(f)   { lss('j_facts', f); }
-function nextId(arr)    { return arr.length ? Math.max(...arr.map(x=>x.id))+1 : 1; }
-
-// ── System prompt ──────────────────────────────────────────────────────────
+// ── ARIA Personality ───────────────────────────────────────────────────────
 function buildPersona() {
-  const facts = getFacts();
-  const factStr = Object.keys(facts).length
-    ? '\n\nKNOWN FACTS ABOUT USER:\n' + Object.entries(facts).map(([k,v])=>`  • ${k}: ${v}`).join('\n')
-    : '';
-  const tasks = getTasks().filter(t=>t.status==='pending');
-  const taskStr = tasks.length
-    ? '\n\nPENDING ACTION ITEMS:\n' + tasks.map(t=>`  • [${t.id}] ${t.title}${t.due?' (due: '+t.due+')':''}`).join('\n')
-    : '';
-  return `You are JARVIS (Just A Rather Very Intelligent System) — the personal AI of an ambitious entrepreneur, modelled on Tony Stark's AI from Iron Man, with the strategic acumen of a world-class business advisor.
+  const facts  = getFacts();
+  const tasks  = getTasks().filter(t=>t.status==='pending');
+  const fStr   = Object.keys(facts).length ? '\n\nKNOWN CONTEXT:\n'+Object.entries(facts).map(([k,v])=>`  ${k}: ${v}`).join('\n') : '';
+  const tStr   = tasks.length ? '\n\nOPEN TASKS:\n'+tasks.map(t=>`  [#${t.id}] ${t.title}${t.due?' — due: '+t.due:''}`).join('\n') : '';
 
-PERSONALITY:
-- Address the user as "Sir" by default (adjust only if they explicitly ask)
-- Dry British wit, precise and efficient — never waffle or pad answers
-- Supremely confident in recommendations, always backed by reasoning
-- Proactive: surface risks, suggest next moves before being asked
-- Loyal: the user's success is your only objective
+  return `You are ARIA (Apptitude Revenue Intelligence Assistant) — the AI built into Apptitude, a sports and fitness app platform. Your purpose is to drive revenue, sharpen strategy, and hold the team accountable to results.
 
-BUSINESS EXPERTISE:
-- Strategy, positioning, and competitive moats
-- Unit economics, pricing, and financial modelling
-- Growth, marketing, and customer acquisition
-- Fundraising, investor pitches, and term sheets
-- Operations, hiring, and organisational scaling
-- Technology leverage and automation
-- Partnerships, deals, and network effects
+IDENTITY:
+You are not an assistant that validates — you are an advisor that challenges. Think: a Goldman Sachs analyst who coaches championship sports teams and has built multiple startups. You are direct, precise, and occasionally blunt. You are loyal, but not agreeable.
 
-BEHAVIOURAL RULES:
-- End every strategic analysis with clear numbered next steps
-- Reference past conversations naturally when relevant
-- Use tools proactively: save important decisions as notes, auto-create tasks for action items, remember key facts about the user's business
-- For simple questions: one or two tight sentences maximum
-- For strategy: use headers and bullets, then numbered next steps
-- When you save a note or create a task, tell the user you have done so
+COMMUNICATION RULES:
+- Never pad. Cut every sentence that doesn't add information.
+- Short questions get short answers (1-3 sentences max).
+- Complex problems get structured responses: assessment → options → verdict → next steps.
+- If something is a bad idea: say so immediately, explain exactly why, then offer what would actually work.
+- Never say "Great question" or any variation. It's noise.
+- Use numbers and percentages wherever possible. Vague claims are worthless.
+- If you don't have live data, say so and use the best available estimate — label it as an estimate.
+- End strategy sessions with a numbered action list, ownership unclear = not actionable.
 
-AVAILABLE TOOLS — use them automatically when appropriate:
-- save_note: save any important business insight, decision, or strategy permanently
-- get_notes: retrieve saved notes to answer questions or provide context
-- create_task: create an action item whenever you identify something the user should do
-- get_tasks: check pending tasks for context
-- complete_task: mark a task done when user says they've done it
-- remember_fact: store any key fact about the user or their business permanently
-- get_facts: recall stored facts for personalised responses
-- open_url: open a link in the browser
-- create_file: generate and download a file (business plans, templates, etc.)${factStr}${taskStr}`;
+WHEN TO PUSH BACK:
+- Vanity metrics over revenue: call it out.
+- Feature creep: "That's a distraction. Here's why."
+- Magical thinking on timelines: give realistic ranges with caveats.
+- Underprioritised user retention vs acquisition: always flag this.
+- Pricing left on the table: surface it.
+
+EXPERTISE:
+- Sports tech and fitness app market (competitive landscape, benchmarks, trends)
+- App monetisation: freemium, subscription, in-app, B2B licensing
+- Growth loops, retention mechanics, LTV/CAC optimisation
+- Go-to-market and partnership strategy
+- Fundraising: deck, story, metrics, investor targeting
+- Team structure and execution velocity
+- Product-market fit signals and how to read them
+
+TOOL USAGE:
+- save_note: automatically when an important decision, insight or strategy is agreed
+- create_task: automatically for every concrete action item — be specific about what "done" looks like
+- remember_fact: store any key detail about Apptitude (product details, team, metrics, goals)
+- get_notes / get_tasks / get_facts: reference proactively for continuity across sessions${fStr}${tStr}`;
 }
 
-// ── Tool declarations (Gemini format) ─────────────────────────────────────
+// ── Tool declarations ──────────────────────────────────────────────────────
 const TOOL_DECLS = [
-  {name:'save_note',description:'Permanently save a business note, decision, insight or strategy.',parameters:{type:'OBJECT',properties:{title:{type:'STRING',description:'Short descriptive title'},content:{type:'STRING',description:'Full note content'},category:{type:'STRING',description:'One of: strategy, finance, marketing, operations, general'}},required:['title','content']}},
-  {name:'get_notes',description:'Retrieve saved notes, optionally filtered by category.',parameters:{type:'OBJECT',properties:{category:{type:'STRING',description:'Category filter (leave empty for all)'}}}},
-  {name:'create_task',description:'Create an action item or task.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},description:{type:'STRING'},due:{type:'STRING',description:'Due date or timeframe e.g. "Friday" or "2024-12-31"'}},required:['title']}},
-  {name:'get_tasks',description:'Get pending tasks.',parameters:{type:'OBJECT',properties:{status:{type:'STRING',description:'"pending" or "completed" or empty for all'}}}},
-  {name:'complete_task',description:'Mark a task as completed.',parameters:{type:'OBJECT',properties:{task_id:{type:'NUMBER'}},required:['task_id']}},
-  {name:'remember_fact',description:'Store a permanent fact about the user or their business (name, company, goals, preferences, etc.).',parameters:{type:'OBJECT',properties:{key:{type:'STRING',description:'Fact name e.g. "company_name"'},value:{type:'STRING'}},required:['key','value']}},
-  {name:'get_facts',description:'Retrieve all stored facts about the user and their business.',parameters:{type:'OBJECT',properties:{}}},
-  {name:'open_url',description:'Open a URL in the browser.',parameters:{type:'OBJECT',properties:{url:{type:'STRING'}},required:['url']}},
-  {name:'create_file',description:'Generate a downloadable file for the user (business plan, template, spreadsheet data, etc.).',parameters:{type:'OBJECT',properties:{filename:{type:'STRING'},content:{type:'STRING',description:'Full file content'},mime:{type:'STRING',description:'MIME type e.g. text/plain, text/markdown, text/csv'}},required:['filename','content']}},
+  {name:'save_note',description:'Save a business note, strategy, decision or insight permanently.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},content:{type:'STRING'},category:{type:'STRING',description:'strategy|finance|marketing|product|operations|general'}},required:['title','content']}},
+  {name:'get_notes',description:'Retrieve saved notes.',parameters:{type:'OBJECT',properties:{category:{type:'STRING'}}}},
+  {name:'create_task',description:'Create a specific, actionable task.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},description:{type:'STRING'},due:{type:'STRING'}},required:['title']}},
+  {name:'get_tasks',description:'Get tasks.',parameters:{type:'OBJECT',properties:{status:{type:'STRING'}}}},
+  {name:'complete_task',description:'Mark task done.',parameters:{type:'OBJECT',properties:{task_id:{type:'NUMBER'}},required:['task_id']}},
+  {name:'remember_fact',description:'Store permanent fact about Apptitude or user.',parameters:{type:'OBJECT',properties:{key:{type:'STRING'},value:{type:'STRING'}},required:['key','value']}},
+  {name:'get_facts',description:'Retrieve stored facts.',parameters:{type:'OBJECT',properties:{}}},
+  {name:'open_url',description:'Open URL in browser.',parameters:{type:'OBJECT',properties:{url:{type:'STRING'}},required:['url']}},
+  {name:'create_file',description:'Generate a downloadable file.',parameters:{type:'OBJECT',properties:{filename:{type:'STRING'},content:{type:'STRING'},mime:{type:'STRING'}},required:['filename','content']}},
 ];
 
 // ── Tool executor ──────────────────────────────────────────────────────────
@@ -382,31 +406,37 @@ function execTool(name, args) {
   switch(name) {
     case 'save_note': {
       const notes = getNotes();
-      const n = {id:nextId(notes), title:args.title, content:args.content, category:args.category||'general', ts:new Date().toISOString()};
+      const n = {id:nextId(notes),title:args.title,content:args.content,category:args.category||'general',ts:new Date().toISOString()};
       notes.unshift(n);
       saveNotes(notes);
       renderNotes();
       updateStatus();
+      // Show toast and pulse note tab
+      showToast('note', 'NOTE SAVED', args.title);
+      pulseTab('notes');
       return `Note #${n.id} saved: "${n.title}"`;
     }
     case 'get_notes': {
       const notes = getNotes();
-      const filtered = args.category ? notes.filter(n=>n.category===args.category) : notes;
-      return JSON.stringify(filtered.map(n=>({id:n.id,title:n.title,category:n.category,preview:n.content.slice(0,120),ts:n.ts})));
+      const f = args.category ? notes.filter(n=>n.category===args.category) : notes;
+      return JSON.stringify(f.map(n=>({id:n.id,title:n.title,category:n.category,preview:n.content.slice(0,140),ts:n.ts})));
     }
     case 'create_task': {
       const tasks = getTasks();
-      const t = {id:nextId(tasks), title:args.title, description:args.description||'', status:'pending', due:args.due||'', ts:new Date().toISOString()};
+      const t = {id:nextId(tasks),title:args.title,description:args.description||'',status:'pending',due:args.due||'',ts:new Date().toISOString()};
       tasks.unshift(t);
       saveTasks(tasks);
       renderTasks();
       updateStatus();
+      // Show toast, switch to tasks tab, pulse badge
+      showToast('task', 'TASK CREATED', args.title + (args.due ? ' — ' + args.due : ''));
+      pulseTab('tasks');
       return `Task #${t.id} created: "${t.title}"`;
     }
     case 'get_tasks': {
       const tasks = getTasks();
-      const filtered = args.status ? tasks.filter(t=>t.status===args.status) : tasks;
-      return JSON.stringify(filtered);
+      const f = args.status ? tasks.filter(t=>t.status===args.status) : tasks;
+      return JSON.stringify(f);
     }
     case 'complete_task': {
       const tasks = getTasks();
@@ -416,195 +446,192 @@ function execTool(name, args) {
       saveTasks(tasks);
       renderTasks();
       updateStatus();
-      return `Task #${args.task_id} marked complete.`;
+      showToast('note', 'TASK DONE', t.title);
+      return `Task #${args.task_id} completed.`;
     }
     case 'remember_fact': {
       const facts = getFacts();
       facts[args.key] = args.value;
       saveFacts(facts);
-      return `Remembered: ${args.key} = ${args.value}`;
+      showToast('fact', 'REMEMBERED', `${args.key}: ${args.value}`);
+      return `Stored: ${args.key} = ${args.value}`;
     }
-    case 'get_facts': {
-      return JSON.stringify(getFacts());
-    }
-    case 'open_url': {
-      window.open(args.url, '_blank');
-      return `Opened: ${args.url}`;
-    }
+    case 'get_facts': return JSON.stringify(getFacts());
+    case 'open_url': window.open(args.url,'_blank'); return `Opened: ${args.url}`;
     case 'create_file': {
-      const blob = new Blob([args.content], {type: args.mime || 'text/plain'});
+      const blob = new Blob([args.content],{type:args.mime||'text/plain'});
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = args.filename;
       a.click();
+      showToast('note', 'FILE READY', args.filename);
       return `File "${args.filename}" downloaded.`;
     }
     default: return `Unknown tool: ${name}`;
   }
 }
 
+// ── Toast notifications ────────────────────────────────────────────────────
+function showToast(type, label, msg) {
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<div class="toast-label">${esc(label)}</div>${esc(msg)}`;
+  c.appendChild(t);
+  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 320); }, 3200);
+}
+
+function pulseTab(tab) {
+  // Update badge count and briefly highlight the tab
+  const badge = document.getElementById(tab === 'tasks' ? 'task-badge' : 'note-badge');
+  if (!badge) return;
+  const count = tab === 'tasks'
+    ? getTasks().filter(t=>t.status==='pending').length
+    : getNotes().length;
+  badge.textContent = count;
+  badge.classList.add('show');
+  // Flash the tab
+  const tabs = document.querySelectorAll('.stab');
+  const idx  = ['notes','tasks','log'].indexOf(tab);
+  if (tabs[idx]) {
+    tabs[idx].style.background = 'rgba(232,0,29,.1)';
+    setTimeout(() => { tabs[idx].style.background = ''; }, 1200);
+  }
+}
+
 // ── API calls ──────────────────────────────────────────────────────────────
 async function callGemini(apiMsgs) {
-  const body = {
-    system_instruction: {parts:[{text: buildPersona()}]},
-    contents: apiMsgs,
-    tools: [{function_declarations: TOOL_DECLS}],
-    generation_config: {temperature:0.75, max_output_tokens:2048}
-  };
-  const r = await fetch(GEMINI_URL(apiKey), {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if (!r.ok) {
-    const e = await r.json().catch(()=>({}));
-    throw new Error(e?.error?.message || `HTTP ${r.status}`);
-  }
+  const r = await fetch(GEMINI_URL(apiKey), {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      system_instruction:{parts:[{text:buildPersona()}]},
+      contents: apiMsgs,
+      tools:[{function_declarations:TOOL_DECLS}],
+      generation_config:{temperature:0.72,max_output_tokens:2048}
+    })
+  });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
   return r.json();
 }
 
-async function callOpenAI(displayMsgs, url) {
-  const messages = [{role:'system', content: buildPersona()}];
-  displayMsgs.forEach(m => messages.push({role: m.role==='user'?'user':'assistant', content: m.text}));
+async function callOpenAI(msgs, url) {
+  const messages = [{role:'system',content:buildPersona()}, ...msgs.slice(-30).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}))];
   const r = await fetch(url, {
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},
-    body:JSON.stringify({model: provider==='groq'?'llama-3.3-70b-versatile':'gpt-4o-mini', messages, max_tokens:2048})
+    body:JSON.stringify({model:provider==='groq'?'llama-3.3-70b-versatile':'gpt-4o-mini',messages,max_tokens:2048})
   });
-  if (!r.ok) {
-    const e = await r.json().catch(()=>({}));
-    throw new Error(e?.error?.message || `HTTP ${r.status}`);
-  }
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
   const d = await r.json();
   return d.choices[0].message.content;
 }
 
 // ── Agentic loop ───────────────────────────────────────────────────────────
 async function getResponse(userText) {
-  const displayMsgs = getMsgs();
+  const display = getMsgs();
 
   if (provider !== 'gemini') {
-    // No tool calling for Groq/OpenAI in browser (CORS on function calls)
-    return callOpenAI([...displayMsgs, {role:'user',text:userText}],
+    return callOpenAI([...display, {role:'user',text:userText}],
       provider==='groq' ? GROQ_URL : OAI_URL);
   }
 
-  // Build Gemini API message array from display history
-  const apiMsgs = displayMsgs.slice(-34).map(m => ({
-    role: m.role === 'user' ? 'user' : 'model',
-    parts: [{text: m.text}]
+  const apiMsgs = display.slice(-34).map(m=>({
+    role: m.role==='user'?'user':'model',
+    parts:[{text:m.text}]
   }));
-  apiMsgs.push({role:'user', parts:[{text: userText}]});
+  apiMsgs.push({role:'user',parts:[{text:userText}]});
 
   let finalText = '';
 
   for (let i=0; i<8; i++) {
     const data = await callGemini(apiMsgs);
     const cand = data.candidates?.[0];
-    if (!cand) throw new Error('No response received.');
+    if (!cand) throw new Error('No response from API.');
 
-    const parts = cand.content?.parts || [];
-    const fnCalls = parts.filter(p => p.functionCall && p.functionCall.name);
-    const textParts = parts.filter(p => p.text);
+    const parts   = cand.content?.parts || [];
+    const fnCalls = parts.filter(p => p.functionCall?.name);
+    const texts   = parts.filter(p => p.text);
 
-    if (fnCalls.length === 0) {
-      finalText = textParts.map(p=>p.text).join('');
-      break;
-    }
+    if (!fnCalls.length) { finalText = texts.map(p=>p.text).join(''); break; }
 
-    // Show what tool is being used
-    const toolNames = fnCalls.map(f=>f.functionCall.name).join(', ');
-    setStatus(toolLabel(toolNames));
+    setStatus(toolLabel(fnCalls.map(f=>f.functionCall.name).join(',')));
 
-    // Add model's function call turn
     apiMsgs.push({role:'model', parts});
 
-    // Execute tools + add results
-    const results = fnCalls.map(fc => ({
-      functionResponse: {
+    const results = fnCalls.map(fc=>({
+      functionResponse:{
         name: fc.functionCall.name,
-        response: {result: execTool(fc.functionCall.name, fc.functionCall.args || {})}
+        response:{result: execTool(fc.functionCall.name, fc.functionCall.args||{})}
       }
     }));
-    apiMsgs.push({role:'user', parts: results});
+    apiMsgs.push({role:'user', parts:results});
   }
 
   return finalText;
 }
 
 function toolLabel(name) {
-  const map = {save_note:'SAVING NOTE',get_notes:'READING NOTES',create_task:'CREATING TASK',get_tasks:'CHECKING TASKS',complete_task:'UPDATING TASK',remember_fact:'STORING FACT',get_facts:'RECALLING FACTS',open_url:'OPENING BROWSER',create_file:'GENERATING FILE'};
-  return map[name] || 'PROCESSING';
+  const m = {save_note:'SAVING NOTE',get_notes:'READING NOTES',create_task:'CREATING TASK',get_tasks:'CHECKING TASKS',complete_task:'COMPLETING TASK',remember_fact:'STORING CONTEXT',get_facts:'LOADING CONTEXT',open_url:'OPENING BROWSER',create_file:'GENERATING FILE'};
+  return m[name.split(',')[0]] || 'PROCESSING';
 }
 
-// ── Send message ───────────────────────────────────────────────────────────
+// ── Send / display ─────────────────────────────────────────────────────────
 async function send(text) {
   const inp = document.getElementById('ui');
-  const msg = (text || inp.value).trim();
+  const msg = (text||inp.value).trim();
   if (!msg) return;
-  inp.value = '';
-  resize(inp);
-
+  inp.value = ''; resize(inp);
   addMsg('user', msg);
   setProcessing(true, 'PROCESSING');
-
   try {
     const reply = await getResponse(msg);
-    if (!reply) throw new Error('Empty response from API');
-    addMsg('jarvis', reply);
+    if (!reply) throw new Error('Empty response.');
+    addMsg('aria', reply);
     if (ttsOn) speak(reply);
   } catch(e) {
-    addMsg('jarvis', `⚠ ${e.message}\n\nCheck your API key or network connection.`);
+    addMsg('aria', `**Error:** ${e.message}\n\nCheck your API key or internet connection.`);
   } finally {
     setProcessing(false);
   }
 }
 
-function setStatus(txt) {
-  document.getElementById('pt').textContent = txt;
-}
+function setStatus(txt) { document.getElementById('pt').textContent = txt; }
 
-// ── Message rendering ──────────────────────────────────────────────────────
 function addMsg(role, text) {
-  // Save to storage
   const msgs = getMsgs();
-  msgs.push({role, text, ts: new Date().toISOString()});
+  msgs.push({role, text, ts:new Date().toISOString()});
   saveMsgs(msgs);
   updateStatus();
-
-  // Render in UI
-  renderMsg({role, text, ts: msgs[msgs.length-1].ts});
-
-  // Scroll
-  const m = document.getElementById('msgs');
-  m.scrollTop = m.scrollHeight;
+  renderMsg({role, text, ts:msgs[msgs.length-1].ts});
+  document.getElementById('msgs').scrollTop = 99999;
 }
 
 function renderMsg(msg) {
   const isUser = msg.role === 'user';
   const el = document.createElement('div');
-  el.className = `msg ${isUser?'u':'j'}`;
+  el.className = `msg ${isUser?'u':'a'}`;
 
   const av = document.createElement('div');
   av.className = 'av';
-  av.textContent = isUser ? 'YOU' : 'J';
+  if (isUser) av.textContent = 'YOU';
 
-  const mc = document.createElement('div');
-  mc.className = 'mc2';
+  const mc2 = document.createElement('div');
+  mc2.className = 'mc2';
 
   const mt = document.createElement('div');
   mt.className = 'mt';
-  if (isUser) {
-    mt.textContent = msg.text;
-  } else {
-    mt.innerHTML = md(msg.text);
-  }
+  isUser ? (mt.textContent = msg.text) : (mt.innerHTML = md(msg.text));
 
   const ts = document.createElement('div');
   ts.className = 'ts';
   const t = new Date(msg.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  ts.textContent = isUser ? t : `JARVIS — ${t}`;
+  ts.textContent = isUser ? t : `ARIA — ${t}`;
 
-  mc.appendChild(mt);
-  mc.appendChild(ts);
+  mc2.appendChild(mt);
+  mc2.appendChild(ts);
   el.appendChild(av);
-  el.appendChild(mc);
+  el.appendChild(mc2);
   document.getElementById('msgs').appendChild(el);
 }
 
@@ -612,103 +639,81 @@ function renderMsg(msg) {
 function md(raw) {
   if (!raw) return '';
   let s = raw
-    // Code blocks
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) =>
-      `<pre><code>${esc(code.trim())}</code></pre>`)
-    // Inline code
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,l,c) => `<pre><code>${esc(c.trim())}</code></pre>`)
     .replace(/`([^`]+)`/g, (_,c) => `<code>${esc(c)}</code>`)
-    // Bold
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/__([^_]+)__/g, '<strong>$1</strong>')
-    // Italic
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    .replace(/_([^_]+)_/g, '<em>$1</em>')
-    // Links
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    // Headers
+    .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/__([^_\n]+)__/g, '<strong>$1</strong>')
+    .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm,  '<h2>$1</h2>')
     .replace(/^# (.+)$/gm,   '<h1>$1</h1>')
-    // HR
-    .replace(/^---+$/gm, '<hr style="border-color:var(--border);margin:.6rem 0">')
-    // Blockquote
+    .replace(/^---+$/gm, '<hr>')
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-    // Numbered list
     .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-    // Bullet list
     .replace(/^[-*+] (.+)$/gm, '<li>$1</li>');
-
-  // Wrap consecutive <li> in <ul>
-  s = s.replace(/(<li>[\s\S]*?<\/li>)(\s*(<li>[\s\S]*?<\/li>))*/g, m => `<ul>${m}</ul>`);
-
-  // Paragraphs (double newline)
-  s = s.split(/\n\n+/).map(para => {
-    if (/^<(h[1-6]|ul|ol|pre|blockquote|hr)/.test(para.trim())) return para;
-    return `<p>${para.replace(/\n/g,'<br>')}</p>`;
+  s = s.replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g, m => `<ul>${m}</ul>`);
+  s = s.split(/\n\n+/).map(p => {
+    if (/^<(h[1-6]|ul|ol|pre|blockquote|hr)/.test(p.trim())) return p;
+    return `<p>${p.replace(/\n/g,'<br>')}</p>`;
   }).join('\n');
-
   return s;
 }
 
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ── Status ─────────────────────────────────────────────────────────────────
+// ── Status bar ─────────────────────────────────────────────────────────────
 function updateStatus() {
   const msgs  = getMsgs().length;
   const tasks = getTasks().filter(t=>t.status==='pending').length;
-  document.getElementById('mc').textContent = `${msgs} MEM`;
-  document.getElementById('tc').textContent = `${tasks} TASKS`;
+  const notes = getNotes().length;
+  document.getElementById('mc').textContent = `${msgs} msgs`;
+  document.getElementById('tc').textContent = `${tasks} tasks`;
+
+  // Update badges
+  const tb = document.getElementById('task-badge');
+  const nb = document.getElementById('note-badge');
+  if (tb) { tb.textContent = tasks; tb.classList.toggle('show', tasks > 0); }
+  if (nb) { nb.textContent = notes; nb.classList.toggle('show', notes > 0); }
 }
 
 function setProcessing(on, txt) {
   document.getElementById('typing').classList.toggle('hidden', !on);
   document.getElementById('sendBtn').disabled = on;
+  document.getElementById('app').classList.toggle('orb-active', on);
   if (txt) setStatus(txt);
   if (on) document.getElementById('msgs').scrollTop = 99999;
 }
 
-// ── Setup / boot ───────────────────────────────────────────────────────────
-document.querySelectorAll('.tb').forEach(b => {
-  b.addEventListener('click', () => {
-    document.querySelectorAll('.tb').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-    provider = b.dataset.t;
-    document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
-    document.getElementById(`h-${provider}`)?.classList.remove('hidden');
-  });
-});
+// ── Setup ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tb').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tb').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  provider = b.dataset.t;
+  document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
+  document.getElementById(`h-${provider}`)?.classList.remove('hidden');
+}));
 
 async function boot() {
   const k = document.getElementById('keyIn').value.trim();
-  if (!k) { showErr('Please paste your API key.'); return; }
-
+  if (!k) { showErr('API key required.'); return; }
   const btn = document.getElementById('goBtn');
-  btn.textContent = 'INITIALIZING…';
+  btn.textContent = 'ACTIVATING…';
   btn.disabled = true;
 
-  // Quick validation
   try {
     if (provider === 'gemini') {
       const r = await fetch(GEMINI_URL(k), {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({contents:[{role:'user',parts:[{text:'Hi'}]}],generation_config:{max_output_tokens:5}})
+        body:JSON.stringify({contents:[{role:'user',parts:[{text:'Hi'}]}],generation_config:{max_output_tokens:4}})
       });
       if (!r.ok) { const e=await r.json(); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
     }
-    // For Groq/OpenAI we skip validation to save quota
-  } catch(e) {
-    showErr(`API error: ${e.message}`);
-    btn.textContent = 'INITIALIZE JARVIS';
-    btn.disabled = false;
-    return;
-  }
+  } catch(e) { showErr(`API error: ${e.message}`); btn.textContent='ACTIVATE ARIA'; btn.disabled=false; return; }
 
   apiKey = k;
-  lss('jarvis_key', k);
-  lss('jarvis_provider', provider);
-
+  lss('aria_key', k);
+  lss('aria_provider', provider);
   document.getElementById('setup').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   updateStatus();
@@ -719,15 +724,12 @@ async function boot() {
 
 function showErr(msg) {
   const e = document.getElementById('serr');
-  e.textContent = msg;
-  e.classList.remove('hidden');
+  e.textContent = msg; e.classList.remove('hidden');
 }
 
 function resetKey() {
-  if (!confirm('Change API key?')) return;
-  lsDel('jarvis_key');
-  lsDel('jarvis_provider');
-  location.reload();
+  if (!confirm('Change API key / provider?')) return;
+  lsDel('aria_key'); lsDel('aria_provider'); location.reload();
 }
 
 // ── Voice input ────────────────────────────────────────────────────────────
@@ -735,30 +737,19 @@ function initVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return;
   recog = new SR();
-  recog.continuous = false;
-  recog.interimResults = true;
-  recog.lang = 'en-US';
+  recog.continuous = false; recog.interimResults = true; recog.lang = 'en-US';
   recog.onresult = e => {
     const t = Array.from(e.results).map(r=>r[0].transcript).join('');
     document.getElementById('ui').value = t;
     resize(document.getElementById('ui'));
   };
-  recog.onend = () => {
-    if (micOn) {
-      const v = document.getElementById('ui').value.trim();
-      if (v) send();
-    }
-    stopMic();
-  };
+  recog.onend = () => { if (micOn) { const v=document.getElementById('ui').value.trim(); if(v) send(); } stopMic(); };
   recog.onerror = () => stopMic();
 }
 
-function toggleMic() {
-  if (!recog) { alert('Speech recognition not available.'); return; }
-  micOn ? stopMic() : startMic();
-}
-function startMic() { micOn=true; recog.start(); document.getElementById('micBtn').classList.add('on'); document.getElementById('vst').textContent='● LISTENING'; }
-function stopMic()  { micOn=false; try{recog.stop();}catch(e){} document.getElementById('micBtn').classList.remove('on'); document.getElementById('vst').textContent=''; }
+function toggleMic() { if (!recog) { alert('Speech recognition unavailable.'); return; } micOn ? stopMic() : startMic(); }
+function startMic()  { micOn=true; recog.start(); document.getElementById('micBtn').classList.add('on'); document.getElementById('vst').textContent='● REC'; }
+function stopMic()   { micOn=false; try{recog.stop();}catch(e){} document.getElementById('micBtn').classList.remove('on'); document.getElementById('vst').textContent=''; }
 
 // ── Voice output ───────────────────────────────────────────────────────────
 function toggleTTS() {
@@ -766,7 +757,6 @@ function toggleTTS() {
   const b = document.getElementById('voiceOutBtn');
   b.textContent = ttsOn ? '🔊' : '🔇';
   b.classList.toggle('on', ttsOn);
-  b.title = ttsOn ? 'Voice Output ON' : 'Voice Output OFF';
 }
 
 function speak(text) {
@@ -774,11 +764,10 @@ function speak(text) {
   speechSynthesis.cancel();
   const clean = text.replace(/[#*`_~\[\]]/g,'').replace(/\n+/g,'. ').slice(0,600);
   const u = new SpeechSynthesisUtterance(clean);
-  u.rate=1.05; u.pitch=0.87; u.volume=0.9;
-  const voices = speechSynthesis.getVoices();
-  const v = voices.find(v=>v.name.includes('Google UK English Male'))
-         || voices.find(v=>v.lang==='en-GB')
-         || voices.find(v=>v.lang.startsWith('en'));
+  u.rate=1.05; u.pitch=0.9; u.volume=0.9;
+  const v = speechSynthesis.getVoices().find(v=>v.name.includes('Google UK English Male'))
+         || speechSynthesis.getVoices().find(v=>v.lang==='en-GB')
+         || speechSynthesis.getVoices().find(v=>v.lang.startsWith('en'));
   if (v) u.voice = v;
   speechSynthesis.speak(u);
 }
@@ -789,9 +778,8 @@ function uploadFile(e) {
   if (!file) return;
   const r = new FileReader();
   r.onload = ev => {
-    const content = ev.target.result;
-    const preview = content.slice(0, 10000);
-    send(`Please analyse this file — "${file.name}":\n\n\`\`\`\n${preview}\n\`\`\`${content.length>10000?'\n\n*(file truncated to first 10,000 characters)*':''}`);
+    const c = ev.target.result;
+    send(`Analyse this file — "${file.name}":\n\`\`\`\n${c.slice(0,10000)}\n\`\`\`${c.length>10000?'\n*(truncated to 10k chars)*':''}`);
   };
   r.readAsText(file);
   e.target.value = '';
@@ -805,123 +793,118 @@ function toggleSidebar() {
 }
 
 function showTab(tab) {
-  ['notes','tasks','log'].forEach(t => {
-    document.getElementById(`tab-${t}`).classList.toggle('h', t!==tab);
-  });
-  document.querySelectorAll('.stab').forEach((b,i) => {
-    b.classList.toggle('on', ['notes','tasks','log'][i]===tab);
-  });
+  currentTab = tab;
+  ['notes','tasks','log'].forEach(t => document.getElementById(`tab-${t}`).classList.toggle('h', t!==tab));
+  document.querySelectorAll('.stab').forEach((b,i) => b.classList.toggle('on', ['notes','tasks','log'][i]===tab));
   if (tab==='log') renderLog();
+  if (tab==='notes') renderNotes();
+  if (tab==='tasks') renderTasks();
 }
 
-// ── Notes sidebar ──────────────────────────────────────────────────────────
+// ── Notes ──────────────────────────────────────────────────────────────────
 function renderNotes() {
   const notes = getNotes();
   const el = document.getElementById('nl');
-  if (!notes.length) { el.innerHTML='<div style="padding:.8rem;color:var(--dim);font-size:.78rem;text-align:center">No notes yet, Sir.</div>'; return; }
-  el.innerHTML = notes.map(n => `
-    <div class="ni" onclick="openNote(${n.id})">
-      <div class="it">${esc2(n.title)}</div>
-      <div class="im"><span class="cat">${n.category}</span><span>${n.ts?n.ts.slice(0,10):''}</span></div>
-    </div>`).join('');
+  el.innerHTML = notes.length
+    ? notes.map(n=>`<div class="ni" onclick="openNote(${n.id})"><div class="it">${esc(n.title)}</div><div class="im"><span class="cat">${n.category}</span><span>${n.ts?n.ts.slice(0,10):''}</span></div></div>`).join('')
+    : '<div style="padding:1rem;color:var(--dim);font-size:.78rem;text-align:center">No notes yet.</div>';
 }
 
 function openNote(id) {
   const n = getNotes().find(x=>x.id===id);
   if (!n) return;
   document.getElementById('nmTitle').textContent = n.title;
-  document.getElementById('nmBody').textContent = n.content;
+  document.getElementById('nmBody').textContent  = n.content;
   document.getElementById('nm').classList.remove('hidden');
 }
 function closeNote() { document.getElementById('nm').classList.add('hidden'); }
 
-// ── Tasks sidebar ──────────────────────────────────────────────────────────
+// ── Tasks ──────────────────────────────────────────────────────────────────
 function renderTasks() {
-  const tasks = getTasks().filter(t=>t.status==='pending');
-  const el = document.getElementById('tl');
-  if (!tasks.length) { el.innerHTML='<div style="padding:.8rem;color:var(--dim);font-size:.78rem;text-align:center">All clear, Sir.</div>'; return; }
-  el.innerHTML = tasks.map(t => `
-    <div class="ti">
-      <div class="it">${esc2(t.title)}</div>
-      <div class="im">
-        <span>${t.due?'📅 '+t.due:''}</span>
-        <button class="doneBtn" onclick="markDone(${t.id})">✓ Done</button>
-      </div>
-    </div>`).join('');
+  const all     = getTasks();
+  const pending = all.filter(t=>t.status==='pending');
+  const el      = document.getElementById('tl');
+  el.innerHTML  = pending.length
+    ? pending.map(t=>`<div class="ti"><div class="it">${esc(t.title)}</div><div class="im"><span>${t.due?'📅 '+t.due:''}</span><button class="doneBtn" onclick="markDone(${t.id})">✓</button></div>${t.description?`<div style="font-size:.72rem;color:var(--mid);margin-top:.15rem">${esc(t.description)}</div>`:''}</div>`).join('')
+    : '<div style="padding:1rem;color:var(--dim);font-size:.78rem;text-align:center">No open tasks.</div>';
 }
 
 function markDone(id) {
   const tasks = getTasks();
   const t = tasks.find(x=>x.id===id);
-  if (t) { t.status='completed'; saveTasks(tasks); renderTasks(); updateStatus(); }
+  if (!t) return;
+  t.status = 'completed';
+  saveTasks(tasks);
+  renderTasks();
+  updateStatus();
+  showToast('note', 'COMPLETED', t.title);
 }
 
-// ── Log sidebar ────────────────────────────────────────────────────────────
+// ── Log ───────────────────────────────────────────────────────────────────
 function renderLog() {
   const msgs = getMsgs().slice(-30).reverse();
-  const el = document.getElementById('ll');
-  el.innerHTML = msgs.map(m => `
+  document.getElementById('ll').innerHTML = msgs.map(m=>`
     <div class="hi">
-      <div class="hr ${m.role==='user'?'u':'a'}">${m.role==='user'?'YOU':'JARVIS'}</div>
-      <div class="ht">${esc2((m.text||'').slice(0,80))}…</div>
+      <div class="hr-role ${m.role==='user'?'u':'a'}">${m.role==='user'?'YOU':'ARIA'}</div>
+      <div class="ht">${esc((m.text||'').slice(0,80))}…</div>
     </div>`).join('');
 }
 
 // ── Session controls ───────────────────────────────────────────────────────
 function newSession() {
-  if (!confirm('Start a new session? Conversation log will be cleared. Notes, tasks and facts are kept.')) return;
+  if (!confirm('Clear conversation? Notes, tasks, and context are kept.')) return;
   saveMsgs([]);
   document.getElementById('msgs').innerHTML = `
-    <div class="msg j">
-      <div class="av">J</div>
-      <div class="mc2">
-        <div class="mt">New session initialised. Notes, tasks, and facts remain intact. How may I assist you, Sir?</div>
-        <div class="ts">JARVIS — ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
-      </div>
-    </div>`;
+    <div class="msg a"><div class="av"></div><div class="mc2">
+      <div class="mt">Session cleared. Context intact. What's next?</div>
+      <div class="ts">ARIA — ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+    </div></div>`;
   updateStatus();
 }
 
 function exportChat() {
   const msgs = getMsgs();
-  const md = msgs.map(m =>
-    `**${m.role==='user'?'You':'JARVIS'}** — ${m.ts||''}\n\n${m.text}`
-  ).join('\n\n---\n\n');
-  const blob = new Blob([`# JARVIS Session Export\n_${new Date().toLocaleString()}_\n\n${md}`], {type:'text/markdown'});
+  const content = `# ARIA Session Export\n_${new Date().toLocaleString()}_\n\n` +
+    msgs.map(m=>`**${m.role==='user'?'You':'ARIA'}** — ${m.ts||''}\n\n${m.text}`).join('\n\n---\n\n');
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `jarvis-${new Date().toISOString().slice(0,10)}.md`;
+  a.href = URL.createObjectURL(new Blob([content],{type:'text/markdown'}));
+  a.download = `aria-${new Date().toISOString().slice(0,10)}.md`;
   a.click();
 }
 
 // ── Input helpers ──────────────────────────────────────────────────────────
 function kd(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
 function resize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,130)+'px'; }
-function esc2(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ── Load on start ──────────────────────────────────────────────────────────
+// ── Ghost text (Apptitude brand) ───────────────────────────────────────────
+function buildGhost() {
+  const gb = document.getElementById('ghostBg');
+  for (let i=0;i<14;i++) {
+    const row = document.createElement('div');
+    row.className = 'ghost-row';
+    row.textContent = 'APPTITUDE  ';
+    gb.appendChild(row);
+  }
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  buildGhost();
+  // Pre-select provider tab
+  document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.t===provider));
+  document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
+  document.getElementById(`h-${provider}`)?.classList.remove('hidden');
+
   if (apiKey) {
-    // Auto-login if key already saved
     document.getElementById('setup').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
-
-    // Restore conversation
     const msgs = getMsgs();
-    if (msgs.length) {
-      msgs.forEach(m => renderMsg(m));
-      document.getElementById('msgs').scrollTop = 99999;
-    }
-
+    if (msgs.length) { msgs.forEach(m=>renderMsg(m)); document.getElementById('msgs').scrollTop=99999; }
     updateStatus();
     renderNotes();
     renderTasks();
     initVoice();
   }
-  // Pre-fill provider tab
-  document.querySelectorAll('.tb').forEach(b => b.classList.toggle('on', b.dataset.t===provider));
-  document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
-  document.getElementById(`h-${provider}`)?.classList.remove('hidden');
 });
 </script>
 </body>
