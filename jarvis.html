@@ -209,13 +209,15 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
     <p class="sub">Apptitude Revenue Intelligence Assistant</p>
     <p class="desc">Connect your AI provider to activate ARIA. Your data stays in your browser — never on a server.</p>
     <div class="tabs">
-      <button class="tb on" data-t="gemini">Gemini — Free</button>
-      <button class="tb" data-t="groq">Groq — Free</button>
+      <button class="tb on" data-t="openrouter">OpenRouter ★ Free</button>
+      <button class="tb" data-t="gemini">Gemini</button>
+      <button class="tb" data-t="groq">Groq</button>
       <button class="tb" data-t="openai">OpenAI</button>
     </div>
-    <div id="h-gemini" class="hint">Free key in 30 sec → <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key</strong> → Copy & paste below</div>
-    <div id="h-groq" class="hint hidden">Free key → <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → <strong>API Keys → Create New Key</strong></div>
-    <div id="h-openai" class="hint hidden">Key at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys → Create new secret key</strong></div>
+    <div id="h-openrouter" class="hint">Best free option. → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> → Sign up free → <strong>Create Key</strong> → Copy. Runs Gemini 2.0 Flash free, no credit card, no hard quota.</div>
+    <div id="h-gemini" class="hint hidden">→ <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key → Create key in new project</strong> (important: new project = free tier)</div>
+    <div id="h-groq" class="hint hidden">→ <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → <strong>API Keys → Create New Key</strong></div>
+    <div id="h-openai" class="hint hidden">→ <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys → Create new secret key</strong></div>
     <input class="api-in" id="keyIn" type="password" placeholder="Paste your API key…" onkeydown="if(event.key==='Enter')boot()">
     <button class="go" id="goBtn" onclick="boot()">ACTIVATE ARIA</button>
     <div class="err hidden" id="serr"></div>
@@ -316,12 +318,15 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
 'use strict';
 
 // ── API endpoints ──────────────────────────────────────────────────────────
-const GEMINI_URL = k => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`;
-const GROQ_URL   = 'https://api.groq.com/openai/v1/chat/completions';
-const OAI_URL    = 'https://api.openai.com/v1/chat/completions';
+const GEMINI_URL  = k => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`;
+const GROQ_URL    = 'https://api.groq.com/openai/v1/chat/completions';
+const OAI_URL     = 'https://api.openai.com/v1/chat/completions';
+const OR_URL      = 'https://openrouter.ai/api/v1/chat/completions';
+// Free models on OpenRouter (no credit card, no hard quota)
+const OR_MODEL    = 'google/gemini-2.0-flash-exp:free';
 
 // ── State ──────────────────────────────────────────────────────────────────
-let provider = ls('aria_provider') || 'gemini';
+let provider = ls('aria_provider') || 'openrouter';
 let apiKey   = ls('aria_key')      || '';
 let ttsOn    = false;
 let micOn    = false;
@@ -515,12 +520,12 @@ async function callGemini(apiMsgs) {
   return r.json();
 }
 
-async function callOpenAI(msgs, url) {
+async function callOpenAI(msgs, url, model, extraHeaders={}) {
   const messages = [{role:'system',content:buildPersona()}, ...msgs.slice(-30).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}))];
   const r = await fetch(url, {
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},
-    body:JSON.stringify({model:provider==='groq'?'llama-3.3-70b-versatile':'gpt-4o-mini',messages,max_tokens:2048})
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`,...extraHeaders},
+    body:JSON.stringify({model, messages, max_tokens:2048})
   });
   if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
   const d = await r.json();
@@ -531,9 +536,15 @@ async function callOpenAI(msgs, url) {
 async function getResponse(userText) {
   const display = getMsgs();
 
-  if (provider !== 'gemini') {
-    return callOpenAI([...display, {role:'user',text:userText}],
-      provider==='groq' ? GROQ_URL : OAI_URL);
+  if (provider === 'openrouter') {
+    return callOpenAI([...display, {role:'user',text:userText}], OR_URL, OR_MODEL,
+      {'HTTP-Referer':'https://apptitude.app','X-Title':'ARIA'});
+  }
+  if (provider === 'groq') {
+    return callOpenAI([...display, {role:'user',text:userText}], GROQ_URL, 'llama-3.3-70b-versatile');
+  }
+  if (provider === 'openai') {
+    return callOpenAI([...display, {role:'user',text:userText}], OAI_URL, 'gpt-4o-mini');
   }
 
   const apiMsgs = display.slice(-34).map(m=>({
@@ -709,6 +720,7 @@ async function boot() {
       });
       if (!r.ok) { const e=await r.json(); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
     }
+    // OpenRouter, Groq, OpenAI — skip validation to save quota
   } catch(e) { showErr(`API error: ${e.message}`); btn.textContent='ACTIVATE ARIA'; btn.disabled=false; return; }
 
   apiKey = k;
