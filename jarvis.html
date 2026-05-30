@@ -762,7 +762,7 @@ function showErr(msg){const e=document.getElementById('serr');e.textContent=msg;
 
 function resetKey(){
   if(!confirm('Change provider / API key? Local model cache is kept.'))return;
-  lsDel('aria_key'); lsDel('aria_provider'); location.reload();
+  lsDel('aria_key'); lsDel('aria_provider'); lsDel('aria_local_model'); location.reload();
 }
 
 // ── OpenRouter live models ─────────────────────────────────────────────────
