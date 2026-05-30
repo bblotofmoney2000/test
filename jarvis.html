@@ -14,219 +14,246 @@
   --text:#111111;--mid:#555555;--dim:#AAAAAA;
   --border:rgba(232,0,29,0.1);--border2:rgba(0,0,0,0.06);
   --shadow:0 2px 20px rgba(0,0,0,0.07);
-  --glow:0 0 30px rgba(232,0,29,0.18);
-  --r:12px;
-  --ui:'Inter',sans-serif;
-  --mono:'JetBrains Mono',monospace;
+  --r:12px;--ui:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
 }
 html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
 .hidden{display:none!important}
 
-/* ── Ghost background text (Apptitude brand) ─────────────────────────────── */
 .ghost-bg{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;gap:.6rem;pointer-events:none;z-index:0;overflow:hidden;padding:2rem}
 .ghost-row{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;letter-spacing:.25em;color:rgba(0,0,0,0.048);white-space:nowrap;user-select:none}
 
-/* ── Orb (Apptitude brand orb) ───────────────────────────────────────────── */
-.bg-orb{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle at 38% 62%,rgba(255,208,0,.22) 0%,rgba(255,98,0,.26) 38%,rgba(232,0,29,.2) 68%,transparent 100%);filter:blur(90px);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;animation:orbFloat 14s ease-in-out infinite;transition:filter .6s,opacity .6s}
-.orb-active .bg-orb{filter:blur(70px);opacity:1.4;animation-duration:3s}
+.bg-orb{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle at 38% 62%,rgba(255,208,0,.22) 0%,rgba(255,98,0,.26) 38%,rgba(232,0,29,.2) 68%,transparent 100%);filter:blur(90px);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;animation:orbFloat 14s ease-in-out infinite;transition:filter .6s}
+.orb-active .bg-orb{filter:blur(70px);animation-duration:3s}
 @keyframes orbFloat{0%,100%{transform:translate(-50%,-50%) scale(1)}33%{transform:translate(-48%,-53%) scale(1.04)}66%{transform:translate(-52%,-47%) scale(.97)}}
 
-/* ── Setup modal ──────────────────────────────────────────────────────────── */
+/* Modal */
 .modal{position:fixed;inset:0;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(16px)}
-.mc{background:var(--white);border:1px solid var(--border2);border-radius:20px;padding:3rem 2.5rem;width:min(460px,94vw);text-align:center;box-shadow:0 8px 60px rgba(0,0,0,0.1),0 0 0 1px var(--border)}
-.setup-orb{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 38% 68%,var(--yellow),var(--orange) 48%,var(--red));filter:blur(4px);box-shadow:0 0 28px rgba(232,0,29,.38);margin:0 auto 1.4rem;animation:sPulse 2.2s ease-in-out infinite}
+.mc{background:var(--white);border:1px solid var(--border2);border-radius:20px;padding:2.6rem 2.2rem;width:min(480px,96vw);text-align:center;box-shadow:0 8px 60px rgba(0,0,0,.1),0 0 0 1px var(--border);max-height:96vh;overflow-y:auto}
+.setup-orb{width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 38% 68%,var(--yellow),var(--orange) 48%,var(--red));filter:blur(4px);box-shadow:0 0 28px rgba(232,0,29,.38);margin:0 auto 1.2rem;animation:sPulse 2.2s ease-in-out infinite}
 @keyframes sPulse{0%,100%{box-shadow:0 0 28px rgba(232,0,29,.35)}50%{box-shadow:0 0 48px rgba(255,98,0,.55)}}
-.mc h1{font-size:2rem;font-weight:900;letter-spacing:-.02em;color:var(--text);margin-bottom:.2rem}
+.mc h1{font-size:1.9rem;font-weight:900;letter-spacing:-.02em;margin-bottom:.2rem}
 .mc h1 span{background:var(--fire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.mc .sub{font-family:var(--mono);font-size:.62rem;color:var(--dim);letter-spacing:.18em;margin-bottom:1.6rem;text-transform:uppercase}
-.mc .desc{color:var(--mid);font-size:.86rem;margin-bottom:1.3rem;line-height:1.55}
-.tabs{display:flex;gap:.4rem;justify-content:center;margin-bottom:.85rem}
-.tb{background:transparent;border:1px solid var(--border2);color:var(--mid);padding:.36rem .9rem;border-radius:6px;cursor:pointer;font-family:var(--ui);font-size:.78rem;font-weight:500;transition:all .18s}
+.mc .sub{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.18em;margin-bottom:1.4rem;text-transform:uppercase}
+.mc .desc{color:var(--mid);font-size:.84rem;margin-bottom:1.2rem;line-height:1.55}
+.tabs{display:flex;gap:.35rem;justify-content:center;margin-bottom:.8rem;flex-wrap:wrap}
+.tb{background:transparent;border:1px solid var(--border2);color:var(--mid);padding:.34rem .85rem;border-radius:6px;cursor:pointer;font-family:var(--ui);font-size:.75rem;font-weight:500;transition:all .18s}
 .tb.on,.tb:hover{border-color:var(--red);color:var(--red);background:rgba(232,0,29,.05)}
-.hint{font-size:.78rem;color:var(--mid);background:rgba(232,0,29,.04);border:1px solid var(--border);border-radius:8px;padding:.55rem .9rem;margin-bottom:.85rem;line-height:1.5}
+.hint{font-size:.78rem;color:var(--mid);background:rgba(232,0,29,.04);border:1px solid var(--border);border-radius:8px;padding:.55rem .9rem;margin-bottom:.8rem;line-height:1.55;text-align:left}
 .hint a{color:var(--red);font-weight:600;text-decoration:none}
-.api-in{width:100%;background:rgba(0,0,0,.025);border:1.5px solid var(--border2);border-radius:var(--r);color:var(--text);padding:.76rem 1rem;font-family:var(--mono);font-size:.84rem;outline:none;transition:border-color .2s;margin-bottom:.85rem}
+.api-in{width:100%;background:rgba(0,0,0,.025);border:1.5px solid var(--border2);border-radius:var(--r);color:var(--text);padding:.74rem 1rem;font-family:var(--mono);font-size:.82rem;outline:none;transition:border-color .2s;margin-bottom:.8rem}
 .api-in:focus{border-color:var(--red)}
-.go{width:100%;background:var(--red);color:#fff;font-family:var(--ui);font-size:.9rem;font-weight:700;letter-spacing:.06em;padding:.8rem;border-radius:var(--r);cursor:pointer;border:none;transition:all .2s}
+.go{width:100%;background:var(--red);color:#fff;font-family:var(--ui);font-size:.88rem;font-weight:700;letter-spacing:.06em;padding:.78rem;border-radius:var(--r);cursor:pointer;border:none;transition:all .2s}
 .go:hover{background:#c8001a;transform:translateY(-1px);box-shadow:0 6px 24px rgba(232,0,29,.3)}
 .go:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
-.err{color:var(--red);font-size:.8rem;margin-top:.6rem;font-family:var(--mono)}
+.err{color:var(--red);font-size:.78rem;margin-top:.6rem;font-family:var(--mono)}
 
-/* ── App shell ───────────────────────────────────────────────────────────── */
+/* Local model download UI */
+.local-model-sel{width:100%;background:var(--white);border:1.5px solid var(--border2);border-radius:8px;padding:.42rem .6rem;font-family:var(--mono);font-size:.74rem;color:var(--text);outline:none;cursor:pointer;margin-bottom:.65rem}
+.prog-wrap{margin:.55rem 0 .3rem;display:none}
+.prog-bar{width:100%;height:7px;background:rgba(0,0,0,.06);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:var(--fire);border-radius:4px;transition:width .25s;width:0%}
+.prog-label{font-family:var(--mono);font-size:.62rem;color:var(--mid);margin-top:.3rem;text-align:center;min-height:1.2em}
+.local-warn{font-size:.72rem;color:var(--dim);background:rgba(0,0,0,.03);border:1px solid var(--border2);border-radius:6px;padding:.45rem .7rem;margin-bottom:.65rem;line-height:1.5}
+
+/* App shell */
 #app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1}
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.4rem;background:rgba(255,255,255,.88);border-bottom:1px solid var(--border2);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-shrink:0;z-index:10}
-.hl{display:flex;align-items:center;gap:.9rem}
-.aria-badge{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(3px);box-shadow:0 0 14px rgba(232,0,29,.4);animation:sPulse 2.2s ease-in-out infinite;flex-shrink:0}
-.logo{display:flex;flex-direction:column;gap:.05rem}
-.logo-main{font-size:1.1rem;font-weight:900;letter-spacing:-.01em;line-height:1}
+/* Header */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:.68rem 1.3rem;background:rgba(255,255,255,.88);border-bottom:1px solid var(--border2);backdrop-filter:blur(20px);flex-shrink:0;z-index:10}
+.hl{display:flex;align-items:center;gap:.85rem}
+.aria-badge{width:31px;height:31px;border-radius:50%;background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(3px);box-shadow:0 0 14px rgba(232,0,29,.4);animation:sPulse 2.2s ease-in-out infinite;flex-shrink:0}
+.logo{display:flex;flex-direction:column;gap:.04rem}
+.logo-main{font-size:1.08rem;font-weight:900;letter-spacing:-.01em;line-height:1}
 .logo-main span{background:var(--fire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-sub{font-family:var(--mono);font-size:.52rem;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
-.si{display:flex;gap:1.1rem}
-.ind{display:flex;align-items:center;gap:.38rem;font-family:var(--mono);font-size:.6rem;color:var(--mid);letter-spacing:.07em}
+.logo-sub{font-family:var(--mono);font-size:.5rem;color:var(--dim);letter-spacing:.13em;text-transform:uppercase}
+.si{display:flex;gap:.9rem;align-items:center}
+.ind{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.6rem;color:var(--mid);letter-spacing:.06em}
 .dot{width:6px;height:6px;border-radius:50%;animation:blink 2.2s ease-in-out infinite}
 .dot.g{background:#22C55E;box-shadow:0 0 7px #22C55E}
 .dot.r{background:var(--red);box-shadow:0 0 7px var(--red)}
 .dot.o{background:var(--orange);box-shadow:0 0 7px var(--orange)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.hr2{display:flex;gap:.4rem}
-.ic{background:transparent;border:1.5px solid var(--border2);color:var(--mid);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.hdr-model-sel{font-family:var(--mono);font-size:.58rem;background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--mid);padding:.16rem .35rem;cursor:pointer;max-width:155px;outline:none;display:none}
+.hr2{display:flex;gap:.38rem}
+.ic{background:transparent;border:1.5px solid var(--border2);color:var(--mid);width:31px;height:31px;border-radius:8px;cursor:pointer;font-size:.88rem;display:flex;align-items:center;justify-content:center;transition:all .18s}
 .ic:hover{border-color:var(--red);color:var(--red);background:rgba(232,0,29,.05)}
 .ic.on{border-color:var(--red);color:var(--red);background:rgba(232,0,29,.06)}
 
-/* ── Body ─────────────────────────────────────────────────────────────────── */
+/* Body */
 .body{display:flex;flex:1;overflow:hidden;position:relative}
 
-/* ── Chat ────────────────────────────────────────────────────────────────── */
+/* Chat */
 .chat{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
-.msgs{flex:1;overflow-y:auto;padding:1.4rem;display:flex;flex-direction:column;gap:1rem;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.08) transparent}
-.msg{display:flex;gap:.75rem;max-width:88%;animation:msgIn .25s ease-out}
-@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.msgs{flex:1;overflow-y:auto;padding:1.3rem;display:flex;flex-direction:column;gap:.95rem;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.07) transparent}
+.msg{display:flex;gap:.7rem;max-width:90%;animation:msgIn .22s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 .msg.u{flex-direction:row-reverse;align-self:flex-end}
 .msg.a{align-self:flex-start}
-.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ui);font-size:.7rem;font-weight:700;flex-shrink:0}
+.av{width:31px;height:31px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ui);font-size:.68rem;font-weight:700;flex-shrink:0}
 .a .av{background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(2.5px);box-shadow:0 0 12px rgba(232,0,29,.35);animation:sPulse 2.2s ease-in-out infinite}
-.u .av{background:rgba(0,0,0,.06);border:1.5px solid rgba(0,0,0,.1);color:var(--mid);font-size:.62rem;letter-spacing:.04em}
-.mc2{display:flex;flex-direction:column;gap:.28rem}
-.mt{padding:.8rem 1.05rem;border-radius:var(--r);font-size:.875rem;line-height:1.7;position:relative}
+.u .av{background:rgba(0,0,0,.06);border:1.5px solid rgba(0,0,0,.09);color:var(--mid);font-size:.6rem;filter:none;animation:none}
+.mc2{display:flex;flex-direction:column;gap:.25rem;min-width:0}
+.mt{padding:.78rem 1rem;border-radius:var(--r);font-size:.87rem;line-height:1.72;word-wrap:break-word}
 .a .mt{background:var(--white);border:1px solid var(--border2);border-top-left-radius:3px;box-shadow:var(--shadow)}
-.u .mt{background:linear-gradient(135deg,rgba(232,0,29,.08),rgba(255,98,0,.07));border:1px solid rgba(232,0,29,.14);border-top-right-radius:3px;text-align:right}
-.ts{font-family:var(--mono);font-size:.58rem;color:var(--dim);padding:0 .25rem}
+.u .mt{background:linear-gradient(135deg,rgba(232,0,29,.07),rgba(255,98,0,.06));border:1px solid rgba(232,0,29,.13);border-top-right-radius:3px;text-align:right}
+/* Streaming cursor */
+.streaming::after{content:'▋';animation:cur .7s step-end infinite;color:var(--orange);font-size:.8em}
+@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+.ts{font-family:var(--mono);font-size:.57rem;color:var(--dim);padding:0 .22rem}
 .u .ts{text-align:right}
 /* Markdown */
-.mt h1,.mt h2,.mt h3{font-weight:700;margin:.8rem 0 .35rem;letter-spacing:-.01em}
-.mt h1{font-size:1.08rem;color:var(--red)}.mt h2{font-size:.98rem;color:var(--text)}.mt h3{font-size:.9rem;color:var(--text)}
-.mt p{margin:.35rem 0}
-.mt ul,.mt ol{padding-left:1.35rem;margin:.35rem 0}
-.mt li{margin:.2rem 0}
-.mt code{font-family:var(--mono);background:rgba(232,0,29,.07);border:1px solid rgba(232,0,29,.12);padding:.08em .36em;border-radius:4px;font-size:.82em;color:var(--red)}
-.mt pre{background:rgba(0,0,0,.04);border:1px solid var(--border2);border-radius:8px;padding:.75rem 1rem;overflow-x:auto;margin:.5rem 0}
-.mt pre code{background:none;border:none;padding:0;color:var(--text);font-size:.82rem}
-.mt table{width:100%;border-collapse:collapse;margin:.5rem 0;font-size:.84rem}
-.mt th,.mt td{border:1px solid var(--border2);padding:.36rem .65rem;text-align:left}
-.mt th{background:rgba(232,0,29,.04);color:var(--text);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.mt h1,.mt h2,.mt h3{font-weight:700;margin:.75rem 0 .32rem}
+.mt h1{font-size:1.05rem;color:var(--red)}.mt h2{font-size:.97rem}.mt h3{font-size:.9rem}
+.mt p{margin:.32rem 0}
+.mt ul,.mt ol{padding-left:1.3rem;margin:.32rem 0}
+.mt li{margin:.18rem 0}
+.mt code{font-family:var(--mono);background:rgba(232,0,29,.07);border:1px solid rgba(232,0,29,.12);padding:.07em .34em;border-radius:4px;font-size:.81em;color:var(--red)}
+.mt pre{background:rgba(0,0,0,.04);border:1px solid var(--border2);border-radius:8px;padding:.72rem .95rem;overflow-x:auto;margin:.48rem 0}
+.mt pre code{background:none;border:none;padding:0;color:var(--text);font-size:.8rem}
+.mt table{width:100%;border-collapse:collapse;margin:.48rem 0;font-size:.83rem}
+.mt th,.mt td{border:1px solid var(--border2);padding:.34rem .62rem;text-align:left}
+.mt th{background:rgba(232,0,29,.04);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
 .mt strong{color:var(--red);font-weight:600}
-.mt a{color:var(--red);font-weight:500}
-.mt blockquote{border-left:3px solid var(--red);padding-left:.8rem;color:var(--mid);margin:.4rem 0;font-style:italic}
-.mt hr{border:none;border-top:1px solid var(--border2);margin:.6rem 0}
-/* Tool notification pill */
-.tool-pill{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.62rem;color:var(--orange);background:rgba(255,98,0,.07);border:1px solid rgba(255,98,0,.18);border-radius:20px;padding:.2rem .65rem;margin:.25rem 0}
+.mt a{color:var(--red)}.mt blockquote{border-left:3px solid var(--red);padding-left:.75rem;color:var(--mid);margin:.38rem 0;font-style:italic}
+.mt hr{border:none;border-top:1px solid var(--border2);margin:.55rem 0}
+
 /* Typing */
-.typing{display:flex;align-items:center;gap:.75rem;padding:0 1.4rem 1rem}
-.typing-orb{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(4px);box-shadow:0 0 18px rgba(232,0,29,.5);animation:sPulse 1s ease-in-out infinite;flex-shrink:0}
-.typing-inner{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);padding:.6rem .95rem;display:flex;align-items:center;gap:.55rem;box-shadow:var(--shadow)}
+.typing{display:flex;align-items:center;gap:.7rem;padding:0 1.3rem .95rem}
+.typing-orb{width:31px;height:31px;border-radius:50%;background:radial-gradient(circle at 35% 65%,var(--yellow),var(--orange) 45%,var(--red));filter:blur(4px);box-shadow:0 0 18px rgba(232,0,29,.5);animation:sPulse 1s ease-in-out infinite;flex-shrink:0}
+.typing-inner{background:var(--white);border:1px solid var(--border2);border-radius:var(--r);padding:.58rem .9rem;display:flex;align-items:center;gap:.5rem;box-shadow:var(--shadow)}
 .tdots span{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:bounce .85s ease-in-out infinite;opacity:.7;display:inline-block;margin:0 1.5px}
 .tdots span:nth-child(2){animation-delay:.14s}.tdots span:nth-child(3){animation-delay:.28s}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px);opacity:1}}
-.pt{font-family:var(--mono);font-size:.65rem;color:var(--mid);letter-spacing:.08em}
+.pt{font-family:var(--mono);font-size:.63rem;color:var(--mid);letter-spacing:.08em}
 
-/* ── Sidebar ──────────────────────────────────────────────────────────────── */
-.sb{width:268px;background:rgba(255,255,255,.9);border-left:1px solid var(--border2);display:flex;flex-direction:column;transition:width .28s cubic-bezier(.4,0,.2,1);overflow:hidden;backdrop-filter:blur(12px)}
+/* Sidebar */
+.sb{width:265px;background:rgba(255,255,255,.9);border-left:1px solid var(--border2);display:flex;flex-direction:column;transition:width .27s cubic-bezier(.4,0,.2,1);overflow:hidden;backdrop-filter:blur(12px)}
 .sb.closed{width:0;border-left:none}
 .stabs{display:flex;border-bottom:1px solid var(--border2);flex-shrink:0}
-.stab{flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--mid);padding:.55rem;font-family:var(--ui);font-size:.68rem;font-weight:600;letter-spacing:.08em;cursor:pointer;transition:all .18s;text-transform:uppercase;position:relative}
-.stab .badge{position:absolute;top:4px;right:6px;background:var(--red);color:#fff;border-radius:10px;font-size:.5rem;padding:.06rem .32rem;font-family:var(--mono);line-height:1.6;font-weight:700;opacity:0;transition:opacity .2s}
+.stab{flex:1;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--mid);padding:.52rem;font-family:var(--ui);font-size:.67rem;font-weight:600;letter-spacing:.08em;cursor:pointer;transition:all .18s;text-transform:uppercase;position:relative}
+.stab .badge{position:absolute;top:4px;right:5px;background:var(--red);color:#fff;border-radius:10px;font-size:.5rem;padding:.05rem .3rem;font-family:var(--mono);font-weight:700;opacity:0;transition:opacity .2s}
 .stab .badge.show{opacity:1}
 .stab.on{color:var(--red);border-bottom-color:var(--red);background:rgba(232,0,29,.03)}
-.stab:hover:not(.on){color:var(--text);background:rgba(0,0,0,.02)}
-.sc{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.06) transparent}
+.sc{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.05) transparent}
 .sc.h{display:none}
-.shdr{display:flex;align-items:center;justify-content:space-between;padding:.55rem .85rem;font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:.12em;border-bottom:1px solid var(--border2);text-transform:uppercase}
-.mb{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:.85rem;transition:color .18s;padding:.15rem .3rem;border-radius:4px}
+.shdr{display:flex;align-items:center;justify-content:space-between;padding:.52rem .82rem;font-family:var(--mono);font-size:.57rem;color:var(--dim);letter-spacing:.12em;border-bottom:1px solid var(--border2);text-transform:uppercase}
+.mb{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:.82rem;transition:color .18s;padding:.12rem .28rem;border-radius:4px}
 .mb:hover{color:var(--red)}
-.il{padding:.5rem;display:flex;flex-direction:column;gap:.35rem}
-.ni,.ti{background:var(--white);border:1px solid var(--border2);border-radius:8px;padding:.55rem .75rem;cursor:pointer;transition:all .18s}
-.ni:hover,.ti:hover{border-color:var(--red);box-shadow:0 2px 12px rgba(232,0,29,.1);transform:translateY(-1px)}
-.it{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:.18rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.im{font-family:var(--mono);font-size:.58rem;color:var(--dim);display:flex;align-items:center;justify-content:space-between}
-.cat{background:rgba(232,0,29,.07);color:var(--red);border-radius:4px;padding:.04rem .3rem;font-size:.57rem;font-weight:600}
-.doneBtn{background:transparent;border:1.5px solid rgba(0,0,0,.1);color:var(--mid);border-radius:5px;padding:.08rem .36rem;font-size:.6rem;cursor:pointer;transition:all .18s;font-family:var(--mono)}
+.il{padding:.45rem;display:flex;flex-direction:column;gap:.32rem}
+.ni,.ti{background:var(--white);border:1px solid var(--border2);border-radius:8px;padding:.52rem .72rem;cursor:pointer;transition:all .18s}
+.ni:hover,.ti:hover{border-color:var(--red);box-shadow:0 2px 12px rgba(232,0,29,.09);transform:translateY(-1px)}
+.it{font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:.16rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.im{font-family:var(--mono);font-size:.57rem;color:var(--dim);display:flex;align-items:center;justify-content:space-between}
+.cat{background:rgba(232,0,29,.07);color:var(--red);border-radius:4px;padding:.03rem .28rem;font-size:.56rem;font-weight:600}
+.doneBtn{background:transparent;border:1.5px solid rgba(0,0,0,.09);color:var(--mid);border-radius:5px;padding:.07rem .34rem;font-size:.59rem;cursor:pointer;transition:all .18s;font-family:var(--mono)}
 .doneBtn:hover{border-color:#22C55E;color:#22C55E}
-.hi{padding:.5rem .85rem;border-bottom:1px solid rgba(0,0,0,.035);font-size:.8rem;color:var(--mid);cursor:pointer;transition:background .15s}
-.hi:hover{background:rgba(0,0,0,.025)}
-.hr-role{font-family:var(--mono);font-size:.57rem;letter-spacing:.08em;margin-bottom:.1rem;font-weight:600}
+.hi{padding:.48rem .82rem;border-bottom:1px solid rgba(0,0,0,.032);cursor:pointer;transition:background .14s}
+.hi:hover{background:rgba(0,0,0,.022)}
+.hr-role{font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;margin-bottom:.08rem;font-weight:600}
 .hr-role.u{color:var(--red)}.hr-role.a{color:var(--orange)}
-.ht{font-size:.78rem;line-height:1.38;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.ht{font-size:.77rem;line-height:1.36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 
-/* ── Input ───────────────────────────────────────────────────────────────── */
-.inp-area{background:rgba(255,255,255,.92);border-top:1px solid var(--border2);padding:.8rem 1.1rem .65rem;flex-shrink:0;backdrop-filter:blur(16px)}
-.inp-box{display:flex;align-items:flex-end;gap:.45rem;background:var(--white);border:1.5px solid var(--border2);border-radius:14px;padding:.5rem .6rem;transition:border-color .2s,box-shadow .2s;box-shadow:var(--shadow)}
-.inp-box:focus-within{border-color:rgba(232,0,29,.35);box-shadow:0 0 0 3px rgba(232,0,29,.08),var(--shadow)}
-.ibtn{background:transparent;border:none;color:var(--dim);font-size:1rem;cursor:pointer;padding:.32rem;border-radius:6px;transition:all .18s;flex-shrink:0;display:flex;align-items:center}
-.ibtn:hover{color:var(--red);background:rgba(232,0,29,.06)}
+/* Input */
+.inp-area{background:rgba(255,255,255,.92);border-top:1px solid var(--border2);padding:.75rem 1.05rem .6rem;flex-shrink:0;backdrop-filter:blur(16px)}
+.inp-box{display:flex;align-items:flex-end;gap:.42rem;background:var(--white);border:1.5px solid var(--border2);border-radius:14px;padding:.47rem .57rem;transition:border-color .2s,box-shadow .2s;box-shadow:var(--shadow)}
+.inp-box:focus-within{border-color:rgba(232,0,29,.33);box-shadow:0 0 0 3px rgba(232,0,29,.07),var(--shadow)}
+.ibtn{background:transparent;border:none;color:var(--dim);font-size:.97rem;cursor:pointer;padding:.3rem;border-radius:6px;transition:all .18s;flex-shrink:0;display:flex;align-items:center}
+.ibtn:hover{color:var(--red);background:rgba(232,0,29,.05)}
 .ibtn.on{color:var(--red)}
-#ui{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--ui);font-size:.88rem;line-height:1.55;resize:none;max-height:130px;scrollbar-width:thin}
+#ui{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--ui);font-size:.87rem;line-height:1.55;resize:none;max-height:130px;scrollbar-width:thin}
 #ui::placeholder{color:var(--dim)}
-.sbtn{background:var(--red);color:#fff;padding:.45rem .95rem;border-radius:10px;cursor:pointer;font-family:var(--ui);font-size:.78rem;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;gap:.38rem;transition:all .2s;flex-shrink:0;border:none}
-.sbtn:hover:not(:disabled){background:#c8001a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(232,0,29,.35)}
+.sbtn{background:var(--red);color:#fff;padding:.43rem .9rem;border-radius:10px;cursor:pointer;font-family:var(--ui);font-size:.77rem;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;gap:.35rem;transition:all .2s;flex-shrink:0;border:none}
+.sbtn:hover:not(:disabled){background:#c8001a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(232,0,29,.33)}
 .sbtn:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
-.inp-ft{display:flex;align-items:center;justify-content:space-between;margin-top:.3rem;padding:0 .2rem}
-.ihint{font-family:var(--mono);font-size:.56rem;color:var(--dim);letter-spacing:.05em}
-.vs{font-family:var(--mono);font-size:.6rem;color:var(--red);animation:blink .5s ease-in-out infinite;font-weight:600}
+.inp-ft{display:flex;align-items:center;justify-content:space-between;margin-top:.28rem;padding:0 .18rem}
+.ihint{font-family:var(--mono);font-size:.55rem;color:var(--dim);letter-spacing:.05em}
+.vs{font-family:var(--mono);font-size:.58rem;color:var(--red);animation:blink .5s ease-in-out infinite;font-weight:600}
 
-/* ── Toast ───────────────────────────────────────────────────────────────── */
-#toasts{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.4rem;pointer-events:none}
-.toast{background:var(--white);border:1px solid var(--border2);border-left:3px solid var(--red);padding:.6rem 1rem;border-radius:10px;font-family:var(--mono);font-size:.68rem;color:var(--text);box-shadow:0 4px 24px rgba(0,0,0,.1);transform:translateX(calc(100% + 1rem));transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-width:260px;line-height:1.4}
+/* Toasts */
+#toasts{position:fixed;top:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.38rem;pointer-events:none}
+.toast{background:var(--white);border:1px solid var(--border2);border-left:3px solid var(--red);padding:.55rem .95rem;border-radius:10px;font-family:var(--mono);font-size:.66rem;color:var(--text);box-shadow:0 4px 24px rgba(0,0,0,.1);transform:translateX(calc(100% + 1rem));transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-width:255px;line-height:1.42}
 .toast.show{transform:translateX(0)}
-.toast.task{border-left-color:var(--orange)}
-.toast.note{border-left-color:var(--red)}
-.toast.fact{border-left-color:#8B5CF6}
-.toast-label{font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.18rem}
-.toast.task .toast-label{color:var(--orange)}
-.toast.note .toast-label{color:var(--red)}
-.toast.fact .toast-label{color:#8B5CF6}
+.toast.task{border-left-color:var(--orange)}.toast.fact{border-left-color:#8B5CF6}
+.toast-label{font-size:.54rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.15rem;color:var(--red)}
+.toast.task .toast-label{color:var(--orange)}.toast.fact .toast-label{color:#8B5CF6}
 
-/* ── Note modal ──────────────────────────────────────────────────────────── */
+/* Note modal */
 #nm{background:rgba(255,255,255,.95)}
-#nm .mc{max-width:600px;width:94vw;padding:1.4rem 1.8rem;text-align:left}
-.nmhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--border2)}
-.nmhdr h2{font-size:1rem;font-weight:700;color:var(--text)}
-.nmhdr button{background:transparent;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:.2rem;border-radius:5px;transition:color .18s}
+#nm .mc{max-width:580px;width:94vw;padding:1.35rem 1.7rem;text-align:left}
+.nmhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;padding-bottom:.65rem;border-bottom:1px solid var(--border2)}
+.nmhdr h2{font-size:.97rem;font-weight:700}
+.nmhdr button{background:transparent;border:none;color:var(--dim);font-size:1.08rem;cursor:pointer;padding:.18rem;border-radius:5px;transition:color .18s}
 .nmhdr button:hover{color:var(--red)}
-.nc{font-size:.86rem;line-height:1.72;max-height:65vh;overflow-y:auto;color:var(--text);white-space:pre-wrap;font-family:var(--ui)}
+.nc{font-size:.84rem;line-height:1.72;max-height:63vh;overflow-y:auto;white-space:pre-wrap}
 
-/* ── Misc ────────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.09);border-radius:4px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.08);border-radius:4px}
 </style>
 </head>
 <body>
-
-<!-- Ghost text background (Apptitude DA) -->
 <div class="ghost-bg" id="ghostBg" aria-hidden="true"></div>
-
-<!-- Background orb -->
 <div class="bg-orb" id="bgOrb"></div>
-
-<!-- Toast container -->
 <div id="toasts"></div>
 
-<!-- ── Setup modal ──────────────────────────────────────────────────────── -->
+<!-- Setup -->
 <div id="setup" class="modal">
   <div class="mc">
     <div class="setup-orb"></div>
     <h1><span>ARIA</span></h1>
     <p class="sub">Apptitude Revenue Intelligence Assistant</p>
-    <p class="desc">Connect your AI provider to activate ARIA. Your data stays in your browser — never on a server.</p>
+    <p class="desc">Choose how to power ARIA. Local runs entirely on your device — no account needed.</p>
     <div class="tabs">
-      <button class="tb on" data-t="openrouter">OpenRouter ★ Free</button>
+      <button class="tb on" data-t="local">🖥 Local — Free</button>
+      <button class="tb" data-t="openrouter">OpenRouter</button>
       <button class="tb" data-t="gemini">Gemini</button>
       <button class="tb" data-t="groq">Groq</button>
       <button class="tb" data-t="openai">OpenAI</button>
     </div>
-    <div id="h-openrouter" class="hint">Best free option. → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> → Sign up free → <strong>Create Key</strong> → Copy. No credit card required.<br><br>
-    <label style="font-size:.75rem;font-weight:600;display:block;margin-bottom:.3rem;color:var(--text)">Free model:</label>
-    <select id="orModel" style="width:100%;background:var(--white);border:1.5px solid var(--border2);border-radius:8px;padding:.4rem .6rem;font-family:var(--mono);font-size:.75rem;color:var(--text);outline:none;cursor:pointer"></select></div>
-    <div id="h-gemini" class="hint hidden">→ <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key → Create key in new project</strong> (important: new project = free tier)</div>
+
+    <!-- Local -->
+    <div id="h-local" class="hint">
+      Runs <strong>entirely in Chrome</strong> — no API key, no internet after download, no limits ever.<br>
+      Model downloads once (~200-900MB) then stays cached in your browser.<br><br>
+      <label style="font-size:.74rem;font-weight:600;display:block;margin-bottom:.3rem">Choose model:</label>
+      <select id="localModelSel" class="local-model-sel">
+        <option value="HuggingFaceTB/SmolLM2-360M-Instruct" data-size="~200MB" data-speed="Fast">SmolLM2 360M — Fastest (~200MB) ★ Recommended for your Chromebook</option>
+        <option value="HuggingFaceTB/SmolLM2-1.7B-Instruct" data-size="~900MB" data-speed="Medium">SmolLM2 1.7B — Better quality (~900MB)</option>
+        <option value="Xenova/Qwen1.5-0.5B-Chat" data-size="~300MB" data-speed="Fast">Qwen 0.5B Chat (~300MB)</option>
+        <option value="Xenova/TinyLlama-1.1B-Chat-v1.0" data-size="~600MB" data-speed="Medium">TinyLlama 1.1B (~600MB)</option>
+      </select>
+      <div class="local-warn">⚠ Your m3-8100Y CPU will generate ~3–8 tokens/second. Expect short waits. First launch downloads the model.</div>
+      <div class="prog-wrap" id="progWrap">
+        <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+        <div class="prog-label" id="progLabel">Preparing…</div>
+      </div>
+    </div>
+
+    <!-- OpenRouter -->
+    <div id="h-openrouter" class="hint hidden">
+      → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> — sign up free → Create Key → Copy. No credit card.<br><br>
+      <label style="font-size:.74rem;font-weight:600;display:block;margin-bottom:.3rem">Free model:</label>
+      <select id="orModel" class="local-model-sel" style="opacity:.6">
+        <option disabled selected>Loading live free models…</option>
+      </select>
+    </div>
+
+    <!-- Gemini -->
+    <div id="h-gemini" class="hint hidden">→ <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → <strong>Get API Key → Create key in NEW project</strong> (new project = free tier active)</div>
+
+    <!-- Groq -->
     <div id="h-groq" class="hint hidden">→ <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a> → <strong>API Keys → Create New Key</strong></div>
-    <div id="h-openai" class="hint hidden">→ <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys → Create new secret key</strong></div>
+
+    <!-- OpenAI -->
+    <div id="h-openai" class="hint hidden">→ <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> → <strong>API Keys</strong></div>
+
+    <!-- API key input (hidden for local) -->
     <input class="api-in" id="keyIn" type="password" placeholder="Paste your API key…" onkeydown="if(event.key==='Enter')boot()">
-    <button class="go" id="goBtn" onclick="boot()">ACTIVATE ARIA</button>
+
+    <button class="go" id="goBtn" onclick="boot()">DOWNLOAD &amp; ACTIVATE</button>
     <div class="err hidden" id="serr"></div>
   </div>
 </div>
 
-<!-- ── Main app ─────────────────────────────────────────────────────────── -->
+<!-- App -->
 <div id="app" class="hidden">
   <header class="hdr">
     <div class="hl">
@@ -237,28 +264,27 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
       </div>
     </div>
     <div class="si">
-      <div class="ind"><div class="dot g"></div><span>ONLINE</span></div>
+      <div class="ind"><div class="dot g"></div><span id="providerLabel">ONLINE</span></div>
       <div class="ind"><div class="dot r"></div><span id="mc">—</span></div>
       <div class="ind"><div class="dot o"></div><span id="tc">—</span></div>
-      <select id="orModelHdr" title="Switch model" style="display:none;font-family:var(--mono);font-size:.58rem;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--mid);padding:.18rem .4rem;cursor:pointer;max-width:160px;outline:none"></select>
+      <select id="orModelHdr" class="hdr-model-sel" title="Switch model"></select>
     </div>
     <div class="hr2">
-      <button class="ic" id="voiceOutBtn" onclick="toggleTTS()" title="Voice output OFF">🔇</button>
-      <button class="ic" onclick="toggleSidebar()" title="Toggle panel">⊞</button>
+      <button class="ic" id="voiceOutBtn" onclick="toggleTTS()" title="Voice output">🔇</button>
+      <button class="ic" onclick="toggleSidebar()" title="Panel">⊞</button>
       <button class="ic" onclick="newSession()" title="New session">↺</button>
-      <button class="ic" onclick="exportChat()" title="Export Markdown">↓</button>
+      <button class="ic" onclick="exportChat()" title="Export">↓</button>
       <button class="ic" onclick="resetKey()" title="Settings">⚙</button>
     </div>
   </header>
 
   <div class="body">
-    <!-- Chat -->
     <div class="chat">
       <div class="msgs" id="msgs">
         <div class="msg a">
           <div class="av"></div>
           <div class="mc2">
-            <div class="mt">Let's be clear about what I am.<br><br>I'm <strong>ARIA</strong> — Apptitude's revenue intelligence system. My job is to help you build, grow, and dominate. I'll challenge bad ideas, flag blind spots, and push you toward decisions that move the needle.<br><br>I don't do vague encouragement. I do strategy, numbers, and execution.<br><br>What are we working on?</div>
+            <div class="mt">Let's be clear about what I am.<br><br>I'm <strong>ARIA</strong> — Apptitude's revenue intelligence system. My job is to help you build, grow, and dominate. I challenge bad ideas, flag blind spots, and push you toward decisions that move the needle.<br><br>I don't do vague encouragement. I do strategy, numbers, and execution.<br><br>What are we working on?</div>
             <div class="ts">ARIA — Initialised</div>
           </div>
         </div>
@@ -272,33 +298,22 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
       </div>
     </div>
 
-    <!-- Sidebar -->
     <div class="sb" id="sb">
       <div class="stabs">
-        <button class="stab on" onclick="showTab('notes')">Notes<span class="badge" id="note-badge">0</span></button>
-        <button class="stab" onclick="showTab('tasks')">Tasks<span class="badge" id="task-badge">0</span></button>
+        <button class="stab on" onclick="showTab('notes')">Notes<span class="badge" id="note-badge"></span></button>
+        <button class="stab" onclick="showTab('tasks')">Tasks<span class="badge" id="task-badge"></span></button>
         <button class="stab" onclick="showTab('log')">Log</button>
       </div>
-      <div id="tab-notes" class="sc">
-        <div class="shdr"><span>Intelligence Files</span><button class="mb" onclick="renderNotes()">↻</button></div>
-        <div class="il" id="nl"></div>
-      </div>
-      <div id="tab-tasks" class="sc h">
-        <div class="shdr"><span>Action Items</span><button class="mb" onclick="renderTasks()">↻</button></div>
-        <div class="il" id="tl"></div>
-      </div>
-      <div id="tab-log" class="sc h">
-        <div class="shdr"><span>Conversation Log</span><button class="mb" onclick="renderLog()">↻</button></div>
-        <div class="il" id="ll" style="padding:0"></div>
-      </div>
+      <div id="tab-notes" class="sc"><div class="shdr"><span>Intelligence Files</span><button class="mb" onclick="renderNotes()">↻</button></div><div class="il" id="nl"></div></div>
+      <div id="tab-tasks" class="sc h"><div class="shdr"><span>Action Items</span><button class="mb" onclick="renderTasks()">↻</button></div><div class="il" id="tl"></div></div>
+      <div id="tab-log" class="sc h"><div class="shdr"><span>Conversation Log</span><button class="mb" onclick="renderLog()">↻</button></div><div class="il" id="ll" style="padding:0"></div></div>
     </div>
   </div>
 
-  <!-- Input -->
   <div class="inp-area">
     <div class="inp-box">
       <button class="ibtn" id="micBtn" onclick="toggleMic()" title="Voice input">🎙</button>
-      <label class="ibtn" title="Upload file for analysis">📎<input type="file" id="fi" accept=".txt,.md,.py,.js,.ts,.json,.csv,.html" style="display:none" onchange="uploadFile(event)"></label>
+      <label class="ibtn" title="Upload file">📎<input type="file" id="fi" accept=".txt,.md,.py,.js,.json,.csv,.html" style="display:none" onchange="uploadFile(event)"></label>
       <textarea id="ui" rows="1" placeholder="Ask ARIA anything…" onkeydown="kd(event)" oninput="resize(this)"></textarea>
       <button class="sbtn" id="sendBtn" onclick="send()">Send ▶</button>
     </div>
@@ -309,7 +324,7 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
   </div>
 </div>
 
-<!-- Note detail modal -->
+<!-- Note modal -->
 <div id="nm" class="modal hidden">
   <div class="mc">
     <div class="nmhdr"><h2 id="nmTitle"></h2><button onclick="closeNote()">✕</button></div>
@@ -320,682 +335,581 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
 <script>
 'use strict';
 
-// ── API endpoints ──────────────────────────────────────────────────────────
-const GEMINI_URL  = k => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`;
+// ── Endpoints ──────────────────────────────────────────────────────────────
+const GEMINI_URL  = k=>`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${k}`;
 const GROQ_URL    = 'https://api.groq.com/openai/v1/chat/completions';
 const OAI_URL     = 'https://api.openai.com/v1/chat/completions';
 const OR_URL      = 'https://openrouter.ai/api/v1/chat/completions';
+const HF_CDN      = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.3.3';
 
 // ── State ──────────────────────────────────────────────────────────────────
-let provider    = ls('aria_provider') || 'openrouter';
+let provider    = ls('aria_provider') || 'local';
 let apiKey      = ls('aria_key')      || '';
 let ttsOn       = false;
 let micOn       = false;
 let recog       = null;
 let sbOpen      = true;
-let currentTab  = 'notes';
-let liveModels  = [];   // populated after fetching OpenRouter free models
+let liveModels  = [];
+let localPipe   = null;   // Transformers.js pipeline
 
-// ── LocalStorage ───────────────────────────────────────────────────────────
+// ── Storage ────────────────────────────────────────────────────────────────
 function ls(k,d){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):d}catch{return d}}
 function lss(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function lsDel(k){localStorage.removeItem(k)}
-function getMsgs()    {return ls('aria_msgs',[])}
-function saveMsgs(m)  {lss('aria_msgs',m)}
-function getNotes()   {return ls('aria_notes',[])}
-function saveNotes(n) {lss('aria_notes',n)}
-function getTasks()   {return ls('aria_tasks',[])}
-function saveTasks(t) {lss('aria_tasks',t)}
-function getFacts()   {return ls('aria_facts',{})}
-function saveFacts(f) {lss('aria_facts',f)}
-function nextId(arr)  {return arr.length?Math.max(...arr.map(x=>x.id))+1:1}
+function getMsgs()   {return ls('aria_msgs',[])}
+function saveMsgs(m) {lss('aria_msgs',m)}
+function getNotes()  {return ls('aria_notes',[])}
+function saveNotes(n){lss('aria_notes',n)}
+function getTasks()  {return ls('aria_tasks',[])}
+function saveTasks(t){lss('aria_tasks',t)}
+function getFacts()  {return ls('aria_facts',{})}
+function saveFacts(f){lss('aria_facts',f)}
+function nextId(a)   {return a.length?Math.max(...a.map(x=>x.id))+1:1}
 
-// ── ARIA Personality ───────────────────────────────────────────────────────
+// ── Persona ────────────────────────────────────────────────────────────────
 function buildPersona() {
-  const facts  = getFacts();
-  const tasks  = getTasks().filter(t=>t.status==='pending');
-  const fStr   = Object.keys(facts).length ? '\n\nKNOWN CONTEXT:\n'+Object.entries(facts).map(([k,v])=>`  ${k}: ${v}`).join('\n') : '';
-  const tStr   = tasks.length ? '\n\nOPEN TASKS:\n'+tasks.map(t=>`  [#${t.id}] ${t.title}${t.due?' — due: '+t.due:''}`).join('\n') : '';
-
+  const facts = getFacts();
+  const tasks = getTasks().filter(t=>t.status==='pending');
+  const fStr  = Object.keys(facts).length?'\n\nKNOWN CONTEXT:\n'+Object.entries(facts).map(([k,v])=>`  ${k}: ${v}`).join('\n'):'';
+  const tStr  = tasks.length?'\n\nOPEN TASKS:\n'+tasks.map(t=>`  [#${t.id}] ${t.title}${t.due?' — '+t.due:''}`).join('\n'):'';
   return `You are ARIA (Apptitude Revenue Intelligence Assistant) — the AI built into Apptitude, a sports and fitness app platform. Your purpose is to drive revenue, sharpen strategy, and hold the team accountable to results.
 
-IDENTITY:
-You are not an assistant that validates — you are an advisor that challenges. Think: a Goldman Sachs analyst who coaches championship sports teams and has built multiple startups. You are direct, precise, and occasionally blunt. You are loyal, but not agreeable.
+IDENTITY: You are not an assistant that validates — you are an advisor that challenges. Think: a Goldman Sachs analyst who coaches championship teams and has built multiple startups. Direct, precise, occasionally blunt. Loyal but not agreeable.
 
-COMMUNICATION RULES:
-- Never pad. Cut every sentence that doesn't add information.
-- Short questions get short answers (1-3 sentences max).
-- Complex problems get structured responses: assessment → options → verdict → next steps.
-- If something is a bad idea: say so immediately, explain exactly why, then offer what would actually work.
-- Never say "Great question" or any variation. It's noise.
-- Use numbers and percentages wherever possible. Vague claims are worthless.
-- If you don't have live data, say so and use the best available estimate — label it as an estimate.
-- End strategy sessions with a numbered action list, ownership unclear = not actionable.
+COMMUNICATION: Never pad. Short questions → short answers (1-3 sentences). Complex problems → assessment, options, verdict, next steps. Say bad ideas are bad immediately, explain why, offer what works instead. Never say "Great question." Use numbers and percentages. End strategy sessions with numbered action list.
 
-WHEN TO PUSH BACK:
-- Vanity metrics over revenue: call it out.
-- Feature creep: "That's a distraction. Here's why."
-- Magical thinking on timelines: give realistic ranges with caveats.
-- Underprioritised user retention vs acquisition: always flag this.
-- Pricing left on the table: surface it.
+EXPERTISE: Sports tech market, app monetisation (freemium/subscription/B2B), growth loops, LTV/CAC, go-to-market, fundraising, team structure, product-market fit signals.
 
-EXPERTISE:
-- Sports tech and fitness app market (competitive landscape, benchmarks, trends)
-- App monetisation: freemium, subscription, in-app, B2B licensing
-- Growth loops, retention mechanics, LTV/CAC optimisation
-- Go-to-market and partnership strategy
-- Fundraising: deck, story, metrics, investor targeting
-- Team structure and execution velocity
-- Product-market fit signals and how to read them
-
-TOOL USAGE:
-- save_note: automatically when an important decision, insight or strategy is agreed
-- create_task: automatically for every concrete action item — be specific about what "done" looks like
-- remember_fact: store any key detail about Apptitude (product details, team, metrics, goals)
-- get_notes / get_tasks / get_facts: reference proactively for continuity across sessions${fStr}${tStr}`;
+TOOLS: save_note when important decisions/strategies are agreed. create_task for every concrete action item. remember_fact for key details about Apptitude.${fStr}${tStr}`;
 }
 
-// ── Tool declarations ──────────────────────────────────────────────────────
+// ── Tool declarations (Gemini) ─────────────────────────────────────────────
 const TOOL_DECLS = [
-  {name:'save_note',description:'Save a business note, strategy, decision or insight permanently.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},content:{type:'STRING'},category:{type:'STRING',description:'strategy|finance|marketing|product|operations|general'}},required:['title','content']}},
-  {name:'get_notes',description:'Retrieve saved notes.',parameters:{type:'OBJECT',properties:{category:{type:'STRING'}}}},
-  {name:'create_task',description:'Create a specific, actionable task.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},description:{type:'STRING'},due:{type:'STRING'}},required:['title']}},
+  {name:'save_note',description:'Save a note, decision, strategy or insight.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},content:{type:'STRING'},category:{type:'STRING',description:'strategy|finance|marketing|product|operations|general'}},required:['title','content']}},
+  {name:'get_notes',description:'Retrieve notes.',parameters:{type:'OBJECT',properties:{category:{type:'STRING'}}}},
+  {name:'create_task',description:'Create a task.',parameters:{type:'OBJECT',properties:{title:{type:'STRING'},description:{type:'STRING'},due:{type:'STRING'}},required:['title']}},
   {name:'get_tasks',description:'Get tasks.',parameters:{type:'OBJECT',properties:{status:{type:'STRING'}}}},
   {name:'complete_task',description:'Mark task done.',parameters:{type:'OBJECT',properties:{task_id:{type:'NUMBER'}},required:['task_id']}},
-  {name:'remember_fact',description:'Store permanent fact about Apptitude or user.',parameters:{type:'OBJECT',properties:{key:{type:'STRING'},value:{type:'STRING'}},required:['key','value']}},
-  {name:'get_facts',description:'Retrieve stored facts.',parameters:{type:'OBJECT',properties:{}}},
+  {name:'remember_fact',description:'Store permanent fact.',parameters:{type:'OBJECT',properties:{key:{type:'STRING'},value:{type:'STRING'}},required:['key','value']}},
+  {name:'get_facts',description:'Recall stored facts.',parameters:{type:'OBJECT',properties:{}}},
   {name:'open_url',description:'Open URL in browser.',parameters:{type:'OBJECT',properties:{url:{type:'STRING'}},required:['url']}},
-  {name:'create_file',description:'Generate a downloadable file.',parameters:{type:'OBJECT',properties:{filename:{type:'STRING'},content:{type:'STRING'},mime:{type:'STRING'}},required:['filename','content']}},
+  {name:'create_file',description:'Generate downloadable file.',parameters:{type:'OBJECT',properties:{filename:{type:'STRING'},content:{type:'STRING'},mime:{type:'STRING'}},required:['filename','content']}},
 ];
 
 // ── Tool executor ──────────────────────────────────────────────────────────
 function execTool(name, args) {
   switch(name) {
     case 'save_note': {
-      const notes = getNotes();
-      const n = {id:nextId(notes),title:args.title,content:args.content,category:args.category||'general',ts:new Date().toISOString()};
-      notes.unshift(n);
-      saveNotes(notes);
-      renderNotes();
-      updateStatus();
-      // Show toast and pulse note tab
-      showToast('note', 'NOTE SAVED', args.title);
-      pulseTab('notes');
-      return `Note #${n.id} saved: "${n.title}"`;
+      const notes=[...getNotes()];
+      const n={id:nextId(notes),title:args.title,content:args.content,category:args.category||'general',ts:new Date().toISOString()};
+      notes.unshift(n); saveNotes(notes); renderNotes(); updateStatus();
+      showToast('note','NOTE SAVED',args.title); pulseTab('notes');
+      return `Note #${n.id} saved.`;
     }
     case 'get_notes': {
-      const notes = getNotes();
-      const f = args.category ? notes.filter(n=>n.category===args.category) : notes;
-      return JSON.stringify(f.map(n=>({id:n.id,title:n.title,category:n.category,preview:n.content.slice(0,140),ts:n.ts})));
+      const n=getNotes(); return JSON.stringify((args.category?n.filter(x=>x.category===args.category):n).map(x=>({id:x.id,title:x.title,category:x.category,preview:x.content.slice(0,120)})));
     }
     case 'create_task': {
-      const tasks = getTasks();
-      const t = {id:nextId(tasks),title:args.title,description:args.description||'',status:'pending',due:args.due||'',ts:new Date().toISOString()};
-      tasks.unshift(t);
-      saveTasks(tasks);
-      renderTasks();
-      updateStatus();
-      // Show toast, switch to tasks tab, pulse badge
-      showToast('task', 'TASK CREATED', args.title + (args.due ? ' — ' + args.due : ''));
-      pulseTab('tasks');
-      return `Task #${t.id} created: "${t.title}"`;
+      const tasks=[...getTasks()];
+      const t={id:nextId(tasks),title:args.title,description:args.description||'',status:'pending',due:args.due||'',ts:new Date().toISOString()};
+      tasks.unshift(t); saveTasks(tasks); renderTasks(); updateStatus();
+      showToast('task','TASK CREATED',args.title+(args.due?' — '+args.due:'')); pulseTab('tasks');
+      return `Task #${t.id} created.`;
     }
-    case 'get_tasks': {
-      const tasks = getTasks();
-      const f = args.status ? tasks.filter(t=>t.status===args.status) : tasks;
-      return JSON.stringify(f);
-    }
+    case 'get_tasks': { const t=getTasks(); return JSON.stringify(args.status?t.filter(x=>x.status===args.status):t); }
     case 'complete_task': {
-      const tasks = getTasks();
-      const t = tasks.find(x=>x.id===Number(args.task_id));
-      if (!t) return `Task #${args.task_id} not found.`;
-      t.status = 'completed';
-      saveTasks(tasks);
-      renderTasks();
-      updateStatus();
-      showToast('note', 'TASK DONE', t.title);
-      return `Task #${args.task_id} completed.`;
+      const tasks=getTasks(), t=tasks.find(x=>x.id===Number(args.task_id));
+      if(!t) return `Task not found.`;
+      t.status='completed'; saveTasks(tasks); renderTasks(); updateStatus();
+      showToast('note','COMPLETED',t.title); return `Done.`;
     }
-    case 'remember_fact': {
-      const facts = getFacts();
-      facts[args.key] = args.value;
-      saveFacts(facts);
-      showToast('fact', 'REMEMBERED', `${args.key}: ${args.value}`);
-      return `Stored: ${args.key} = ${args.value}`;
-    }
+    case 'remember_fact': { const f=getFacts(); f[args.key]=args.value; saveFacts(f); showToast('fact','REMEMBERED',`${args.key}: ${args.value}`); return `Stored.`; }
     case 'get_facts': return JSON.stringify(getFacts());
-    case 'open_url': window.open(args.url,'_blank'); return `Opened: ${args.url}`;
+    case 'open_url': window.open(args.url,'_blank'); return `Opened.`;
     case 'create_file': {
-      const blob = new Blob([args.content],{type:args.mime||'text/plain'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = args.filename;
-      a.click();
-      showToast('note', 'FILE READY', args.filename);
-      return `File "${args.filename}" downloaded.`;
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([args.content],{type:args.mime||'text/plain'}));
+      a.download=args.filename; a.click();
+      showToast('note','FILE READY',args.filename); return `Downloaded.`;
     }
     default: return `Unknown tool: ${name}`;
   }
 }
 
-// ── Toast notifications ────────────────────────────────────────────────────
-function showToast(type, label, msg) {
-  const c = document.getElementById('toasts');
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.innerHTML = `<div class="toast-label">${esc(label)}</div>${esc(msg)}`;
-  c.appendChild(t);
-  requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
-  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 320); }, 3200);
+// ── LOCAL MODEL (Transformers.js) ──────────────────────────────────────────
+async function loadLocalModel(modelId, onProgress) {
+  const { pipeline } = await import(HF_CDN);
+
+  // Detect WebGPU
+  let device = 'wasm';
+  try {
+    if (navigator.gpu) {
+      const adapter = await navigator.gpu.requestAdapter();
+      if (adapter) device = 'webgpu';
+    }
+  } catch(e) {}
+
+  localPipe = await pipeline('text-generation', modelId, {
+    device,
+    dtype: device==='webgpu' ? 'q4f16' : 'q4',
+    progress_callback: onProgress || (()=>{})
+  });
+
+  lss('aria_local_model', modelId);
+  return device;
 }
 
-function pulseTab(tab) {
-  // Update badge count and briefly highlight the tab
-  const badge = document.getElementById(tab === 'tasks' ? 'task-badge' : 'note-badge');
-  if (!badge) return;
-  const count = tab === 'tasks'
-    ? getTasks().filter(t=>t.status==='pending').length
-    : getNotes().length;
-  badge.textContent = count;
-  badge.classList.add('show');
-  // Flash the tab
-  const tabs = document.querySelectorAll('.stab');
-  const idx  = ['notes','tasks','log'].indexOf(tab);
-  if (tabs[idx]) {
-    tabs[idx].style.background = 'rgba(232,0,29,.1)';
-    setTimeout(() => { tabs[idx].style.background = ''; }, 1200);
-  }
+async function runLocalStreaming(userText) {
+  if (!localPipe) throw new Error('Model not loaded. Click ⚙ to reload.');
+
+  const { TextStreamer } = await import(HF_CDN);
+
+  // Build message history
+  const history = getMsgs().slice(-16).map(m=>({
+    role: m.role==='user'?'user':'assistant',
+    content: m.text
+  }));
+  history.unshift({role:'system', content: buildPersona()});
+  history.push({role:'user', content: userText});
+
+  // Create streaming message element
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'msg a';
+  msgDiv.innerHTML = `<div class="av"></div><div class="mc2"><div class="mt streaming" id="streamTarget"></div><div class="ts">ARIA — generating…</div></div>`;
+  document.getElementById('msgs').appendChild(msgDiv);
+  document.getElementById('msgs').scrollTop = 99999;
+  setProcessing(false);
+
+  let fullText = '';
+  const target = document.getElementById('streamTarget');
+
+  const streamer = new TextStreamer(localPipe.tokenizer, {
+    skip_prompt: true,
+    skip_special_tokens: true,
+    callback_function: token => {
+      fullText += token;
+      target.innerHTML = md(fullText);
+      target.classList.add('streaming');
+      document.getElementById('msgs').scrollTop = 99999;
+    }
+  });
+
+  await localPipe(history, {
+    max_new_tokens: 768,
+    temperature: 0.72,
+    do_sample: true,
+    repetition_penalty: 1.12,
+    streamer
+  });
+
+  // Finalise
+  target.classList.remove('streaming');
+  const ts = msgDiv.querySelector('.ts');
+  if (ts) ts.textContent = `ARIA — ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+
+  // Save to memory
+  const msgs = getMsgs();
+  msgs.push({role:'aria', text:fullText, ts:new Date().toISOString()});
+  saveMsgs(msgs);
+  updateStatus();
+  if (ttsOn) speak(fullText);
 }
 
-// ── API calls ──────────────────────────────────────────────────────────────
+// ── API: Gemini ────────────────────────────────────────────────────────────
 async function callGemini(apiMsgs) {
   const r = await fetch(GEMINI_URL(apiKey), {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      system_instruction:{parts:[{text:buildPersona()}]},
-      contents: apiMsgs,
-      tools:[{function_declarations:TOOL_DECLS}],
-      generation_config:{temperature:0.72,max_output_tokens:2048}
-    })
+    body:JSON.stringify({system_instruction:{parts:[{text:buildPersona()}]},contents:apiMsgs,tools:[{function_declarations:TOOL_DECLS}],generation_config:{temperature:.72,max_output_tokens:2048}})
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
+  if (!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${r.status}`);}
   return r.json();
 }
 
-async function callOpenAI(msgs, url, model, extraHeaders={}) {
-  const messages = [{role:'system',content:buildPersona()}, ...msgs.slice(-30).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}))];
+// ── API: OpenAI-compatible ─────────────────────────────────────────────────
+async function callOpenAI(msgs, url, model, extra={}) {
+  const messages=[{role:'system',content:buildPersona()},...msgs.slice(-30).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}))];
   const r = await fetch(url, {
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`,...extraHeaders},
-    body:JSON.stringify({model, messages, max_tokens:2048})
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`,...extra},
+    body:JSON.stringify({model,messages,max_tokens:2048})
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
-  const d = await r.json();
-  return d.choices[0].message.content;
+  if (!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${r.status}`);}
+  return (await r.json()).choices[0].message.content;
 }
 
-// ── Agentic loop ───────────────────────────────────────────────────────────
+// ── Get response ───────────────────────────────────────────────────────────
 async function getResponse(userText) {
   const display = getMsgs();
 
-  if (provider === 'openrouter') {
-    const sel     = document.getElementById('orModelHdr') || document.getElementById('orModel');
-    const current = (sel && sel.value) || ls('aria_or_model') || (liveModels[0]?.id || 'meta-llama/llama-3.1-8b-instruct:free');
-    const msgs    = [...display, {role:'user',text:userText}];
-    const headers = {'HTTP-Referer':'https://apptitude.app','X-Title':'ARIA'};
+  if (provider === 'local') {
+    await runLocalStreaming(userText);
+    return null; // streaming handles its own message rendering
+  }
 
-    // Try current model, then auto-fallback through free list
-    const tryOrder = [current, ...liveModels.map(m=>m.id).filter(id=>id!==current)];
-    for (let i = 0; i < Math.min(tryOrder.length, 4); i++) {
-      const model = tryOrder[i];
+  if (provider === 'openrouter') {
+    const sel     = document.getElementById('orModelHdr');
+    const model   = (sel&&sel.value)||ls('aria_or_model')||'meta-llama/llama-3.1-8b-instruct:free';
+    const msgs    = [...display,{role:'user',text:userText}];
+    const hdrs    = {'HTTP-Referer':'https://apptitude.app','X-Title':'ARIA'};
+    const tryList = [model,...liveModels.map(m=>m.id).filter(id=>id!==model)];
+    for (let i=0;i<Math.min(tryList.length,4);i++) {
       try {
-        if (i > 0) {
-          setStatus(`TRYING ${(liveModels.find(m=>m.id===model)?.name||model).split('/').pop().toUpperCase()}`);
-          // Update both selects to reflect the working model
-          lss('aria_or_model', model);
-          ['orModel','orModelHdr'].forEach(sid => { const s=document.getElementById(sid); if(s) s.value=model; });
+        if(i>0){
+          const name=(liveModels.find(m=>m.id===tryList[i])?.name||tryList[i]).split('/').pop().toUpperCase();
+          setStatus(`TRYING ${name}`);
+          lss('aria_or_model',tryList[i]);
+          ['orModel','orModelHdr'].forEach(sid=>{const s=document.getElementById(sid);if(s)s.value=tryList[i];});
         }
-        return await callOpenAI(msgs, OR_URL, model, headers);
+        return await callOpenAI(msgs, OR_URL, tryList[i], hdrs);
       } catch(e) {
-        const msg = e.message.toLowerCase();
-        const isProviderErr = msg.includes('provider') || msg.includes('endpoint') || msg.includes('503') || msg.includes('502') || msg.includes('overloaded');
-        if (!isProviderErr || i === Math.min(tryOrder.length,4)-1) throw e;
-        // Provider down — silently try next
+        const m=e.message.toLowerCase();
+        const soft=m.includes('provider')||m.includes('endpoint')||m.includes('503')||m.includes('502')||m.includes('overloaded');
+        if(!soft||i===Math.min(tryList.length,4)-1) throw e;
       }
     }
   }
-  if (provider === 'groq') {
-    return callOpenAI([...display, {role:'user',text:userText}], GROQ_URL, 'llama-3.3-70b-versatile');
-  }
-  if (provider === 'openai') {
-    return callOpenAI([...display, {role:'user',text:userText}], OAI_URL, 'gpt-4o-mini');
-  }
+  if (provider==='groq')   return callOpenAI([...display,{role:'user',text:userText}],GROQ_URL,'llama-3.3-70b-versatile');
+  if (provider==='openai') return callOpenAI([...display,{role:'user',text:userText}],OAI_URL,'gpt-4o-mini');
 
-  const apiMsgs = display.slice(-34).map(m=>({
-    role: m.role==='user'?'user':'model',
-    parts:[{text:m.text}]
-  }));
+  // Gemini agentic loop
+  const apiMsgs = display.slice(-34).map(m=>({role:m.role==='user'?'user':'model',parts:[{text:m.text}]}));
   apiMsgs.push({role:'user',parts:[{text:userText}]});
-
-  let finalText = '';
-
-  for (let i=0; i<8; i++) {
-    const data = await callGemini(apiMsgs);
-    const cand = data.candidates?.[0];
-    if (!cand) throw new Error('No response from API.');
-
-    const parts   = cand.content?.parts || [];
-    const fnCalls = parts.filter(p => p.functionCall?.name);
-    const texts   = parts.filter(p => p.text);
-
-    if (!fnCalls.length) { finalText = texts.map(p=>p.text).join(''); break; }
-
-    setStatus(toolLabel(fnCalls.map(f=>f.functionCall.name).join(',')));
-
-    apiMsgs.push({role:'model', parts});
-
-    const results = fnCalls.map(fc=>({
-      functionResponse:{
-        name: fc.functionCall.name,
-        response:{result: execTool(fc.functionCall.name, fc.functionCall.args||{})}
-      }
-    }));
-    apiMsgs.push({role:'user', parts:results});
+  let finalText='';
+  for(let i=0;i<8;i++){
+    const data=await callGemini(apiMsgs);
+    const cand=data.candidates?.[0];
+    if(!cand) throw new Error('No response.');
+    const parts=cand.content?.parts||[];
+    const fnCalls=parts.filter(p=>p.functionCall?.name);
+    const texts=parts.filter(p=>p.text);
+    if(!fnCalls.length){finalText=texts.map(p=>p.text).join('');break;}
+    const label=fnCalls.map(f=>f.functionCall.name)[0];
+    setStatus({save_note:'SAVING NOTE',create_task:'CREATING TASK',get_notes:'READING NOTES',remember_fact:'STORING CONTEXT',get_facts:'LOADING CONTEXT',open_url:'OPENING BROWSER',create_file:'GENERATING FILE'}[label]||'PROCESSING');
+    apiMsgs.push({role:'model',parts});
+    apiMsgs.push({role:'user',parts:fnCalls.map(fc=>({functionResponse:{name:fc.functionCall.name,response:{result:execTool(fc.functionCall.name,fc.functionCall.args||{})}}}))});
   }
-
   return finalText;
 }
 
-function toolLabel(name) {
-  const m = {save_note:'SAVING NOTE',get_notes:'READING NOTES',create_task:'CREATING TASK',get_tasks:'CHECKING TASKS',complete_task:'COMPLETING TASK',remember_fact:'STORING CONTEXT',get_facts:'LOADING CONTEXT',open_url:'OPENING BROWSER',create_file:'GENERATING FILE'};
-  return m[name.split(',')[0]] || 'PROCESSING';
-}
-
-// ── Send / display ─────────────────────────────────────────────────────────
+// ── Send ───────────────────────────────────────────────────────────────────
 async function send(text) {
   const inp = document.getElementById('ui');
   const msg = (text||inp.value).trim();
   if (!msg) return;
-  inp.value = ''; resize(inp);
+  inp.value=''; resize(inp);
   addMsg('user', msg);
-  setProcessing(true, 'PROCESSING');
+  setProcessing(true,'PROCESSING');
   try {
     const reply = await getResponse(msg);
-    if (!reply) throw new Error('Empty response.');
-    addMsg('aria', reply);
-    if (ttsOn) speak(reply);
+    if (reply !== null) {
+      if (!reply) throw new Error('Empty response.');
+      addMsg('aria', reply);
+      if (ttsOn) speak(reply);
+    }
   } catch(e) {
-    addMsg('aria', `**Error:** ${e.message}\n\nCheck your API key or internet connection.`);
+    addMsg('aria',`**Error:** ${e.message}\n\nTry switching model with the header dropdown, or click ⚙ to change provider.`);
   } finally {
     setProcessing(false);
   }
 }
 
-function setStatus(txt) { document.getElementById('pt').textContent = txt; }
+function setStatus(t){document.getElementById('pt').textContent=t;}
 
 function addMsg(role, text) {
-  const msgs = getMsgs();
-  msgs.push({role, text, ts:new Date().toISOString()});
-  saveMsgs(msgs);
-  updateStatus();
-  renderMsg({role, text, ts:msgs[msgs.length-1].ts});
-  document.getElementById('msgs').scrollTop = 99999;
+  const msgs=getMsgs();
+  msgs.push({role,text,ts:new Date().toISOString()});
+  saveMsgs(msgs); updateStatus();
+  renderMsg({role,text,ts:msgs[msgs.length-1].ts});
+  document.getElementById('msgs').scrollTop=99999;
 }
 
 function renderMsg(msg) {
-  const isUser = msg.role === 'user';
-  const el = document.createElement('div');
-  el.className = `msg ${isUser?'u':'a'}`;
-
-  const av = document.createElement('div');
-  av.className = 'av';
-  if (isUser) av.textContent = 'YOU';
-
-  const mc2 = document.createElement('div');
-  mc2.className = 'mc2';
-
-  const mt = document.createElement('div');
-  mt.className = 'mt';
-  isUser ? (mt.textContent = msg.text) : (mt.innerHTML = md(msg.text));
-
-  const ts = document.createElement('div');
-  ts.className = 'ts';
-  const t = new Date(msg.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  ts.textContent = isUser ? t : `ARIA — ${t}`;
-
-  mc2.appendChild(mt);
-  mc2.appendChild(ts);
-  el.appendChild(av);
-  el.appendChild(mc2);
+  const isUser=msg.role==='user';
+  const el=document.createElement('div');
+  el.className=`msg ${isUser?'u':'a'}`;
+  const av=document.createElement('div'); av.className='av';
+  if(isUser) av.textContent='YOU';
+  const mc2=document.createElement('div'); mc2.className='mc2';
+  const mt=document.createElement('div'); mt.className='mt';
+  isUser?(mt.textContent=msg.text):(mt.innerHTML=md(msg.text));
+  const ts=document.createElement('div'); ts.className='ts';
+  const t=new Date(msg.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  ts.textContent=isUser?t:`ARIA — ${t}`;
+  mc2.appendChild(mt); mc2.appendChild(ts);
+  el.appendChild(av); el.appendChild(mc2);
   document.getElementById('msgs').appendChild(el);
 }
 
-// ── Markdown renderer ──────────────────────────────────────────────────────
-function md(raw) {
-  if (!raw) return '';
-  let s = raw
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,l,c) => `<pre><code>${esc(c.trim())}</code></pre>`)
-    .replace(/`([^`]+)`/g, (_,c) => `<code>${esc(c)}</code>`)
-    .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/__([^_\n]+)__/g, '<strong>$1</strong>')
-    .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,  '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,   '<h1>$1</h1>')
-    .replace(/^---+$/gm, '<hr>')
-    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-    .replace(/^[-*+] (.+)$/gm, '<li>$1</li>');
-  s = s.replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g, m => `<ul>${m}</ul>`);
-  s = s.split(/\n\n+/).map(p => {
-    if (/^<(h[1-6]|ul|ol|pre|blockquote|hr)/.test(p.trim())) return p;
-    return `<p>${p.replace(/\n/g,'<br>')}</p>`;
-  }).join('\n');
-  return s;
+// ── Markdown ───────────────────────────────────────────────────────────────
+function md(raw){
+  if(!raw)return'';
+  let s=raw
+    .replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<pre><code>${esc(c.trim())}</code></pre>`)
+    .replace(/`([^`]+)`/g,(_,c)=>`<code>${esc(c)}</code>`)
+    .replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/__([^_\n]+)__/g,'<strong>$1</strong>')
+    .replace(/\*([^*\n]+)\*/g,'<em>$1</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/^---+$/gm,'<hr>').replace(/^> (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^\d+\. (.+)$/gm,'<li>$1</li>').replace(/^[-*+] (.+)$/gm,'<li>$1</li>');
+  s=s.replace(/(<li>[\s\S]*?<\/li>(\n|$))+/g,m=>`<ul>${m}</ul>`);
+  return s.split(/\n\n+/).map(p=>/^<(h[1-6]|ul|ol|pre|blockquote|hr)/.test(p.trim())?p:`<p>${p.replace(/\n/g,'<br>')}</p>`).join('\n');
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ── Status ─────────────────────────────────────────────────────────────────
+function updateStatus(){
+  const msgs=getMsgs().length, tasks=getTasks().filter(t=>t.status==='pending').length, notes=getNotes().length;
+  document.getElementById('mc').textContent=`${msgs} msgs`;
+  document.getElementById('tc').textContent=`${tasks} tasks`;
+  const tb=document.getElementById('task-badge'),nb=document.getElementById('note-badge');
+  if(tb){tb.textContent=tasks;tb.classList.toggle('show',tasks>0);}
+  if(nb){nb.textContent=notes;nb.classList.toggle('show',notes>0);}
+}
+function setProcessing(on,txt){
+  document.getElementById('typing').classList.toggle('hidden',!on);
+  document.getElementById('sendBtn').disabled=on;
+  document.getElementById('app').classList.toggle('orb-active',on);
+  if(txt)setStatus(txt);
+  if(on)document.getElementById('msgs').scrollTop=99999;
 }
 
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ── Status bar ─────────────────────────────────────────────────────────────
-function updateStatus() {
-  const msgs  = getMsgs().length;
-  const tasks = getTasks().filter(t=>t.status==='pending').length;
-  const notes = getNotes().length;
-  document.getElementById('mc').textContent = `${msgs} msgs`;
-  document.getElementById('tc').textContent = `${tasks} tasks`;
-
-  // Update badges
-  const tb = document.getElementById('task-badge');
-  const nb = document.getElementById('note-badge');
-  if (tb) { tb.textContent = tasks; tb.classList.toggle('show', tasks > 0); }
-  if (nb) { nb.textContent = notes; nb.classList.toggle('show', notes > 0); }
+// ── Toast ──────────────────────────────────────────────────────────────────
+function showToast(type,label,msg){
+  const c=document.getElementById('toasts'),t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<div class="toast-label">${esc(label)}</div>${esc(msg)}`;
+  c.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),320);},3200);
+}
+function pulseTab(tab){
+  const badge=document.getElementById(tab==='tasks'?'task-badge':'note-badge');
+  if(!badge)return;
+  badge.textContent=tab==='tasks'?getTasks().filter(t=>t.status==='pending').length:getNotes().length;
+  badge.classList.add('show');
+  const idx=['notes','tasks','log'].indexOf(tab);
+  const stabs=document.querySelectorAll('.stab');
+  if(stabs[idx]){stabs[idx].style.background='rgba(232,0,29,.1)';setTimeout(()=>{stabs[idx].style.background='';},1200);}
 }
 
-function setProcessing(on, txt) {
-  document.getElementById('typing').classList.toggle('hidden', !on);
-  document.getElementById('sendBtn').disabled = on;
-  document.getElementById('app').classList.toggle('orb-active', on);
-  if (txt) setStatus(txt);
-  if (on) document.getElementById('msgs').scrollTop = 99999;
-}
-
-// ── Setup ──────────────────────────────────────────────────────────────────
-// Fetch & cache live free models from OpenRouter
-async function fetchFreeModels() {
-  try {
-    const r = await fetch('https://openrouter.ai/api/v1/models');
-    const d = await r.json();
-    liveModels = (d.data || [])
-      .filter(m => m.id.endsWith(':free') ||
-        (parseFloat(m.pricing?.prompt||'1')===0 && parseFloat(m.pricing?.completion||'1')===0))
-      .sort((a,b) => (a.name||a.id).localeCompare(b.name||b.id));
-    return liveModels;
-  } catch(e) {
-    liveModels = [{id:'meta-llama/llama-3.1-8b-instruct:free', name:'Llama 3.1 8B'}];
-    return liveModels;
-  }
-}
-
-// Populate OpenRouter model dropdowns (setup + header)
-function populateModelSelects(models) {
-  const saved = ls('aria_or_model') || (models[0]?.id || '');
-  ['orModel','orModelHdr'].forEach(id => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.innerHTML = models.map(m =>
-      `<option value="${m.id}" ${m.id===saved?'selected':''}>${m.name||m.id}</option>`
-    ).join('');
-    sel.style.opacity = '1';
-    sel.onchange = () => {
-      lss('aria_or_model', sel.value);
-      // sync both selects
-      ['orModel','orModelHdr'].forEach(sid => {
-        const s2 = document.getElementById(sid);
-        if (s2 && s2 !== sel) s2.value = sel.value;
-      });
-    };
-  });
-}
-
-async function buildORDropdown() {
-  const sel = document.getElementById('orModel');
-  if (sel) { sel.innerHTML = '<option disabled selected>Loading models…</option>'; sel.style.opacity='.5'; }
-  const models = await fetchFreeModels();
-  populateModelSelects(models);
-}
-
-document.querySelectorAll('.tb').forEach(b => b.addEventListener('click', () => {
+// ── Setup / boot ───────────────────────────────────────────────────────────
+document.querySelectorAll('.tb').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.tb').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  provider = b.dataset.t;
+  b.classList.add('on'); provider=b.dataset.t;
   document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
   document.getElementById(`h-${provider}`)?.classList.remove('hidden');
+  const keyWrap=document.getElementById('keyIn');
+  keyWrap.style.display=provider==='local'?'none':'block';
+  const goBtn=document.getElementById('goBtn');
+  goBtn.textContent=provider==='local'?'DOWNLOAD & ACTIVATE':'ACTIVATE ARIA';
+  if(provider==='openrouter') fetchAndPopulateOR();
 }));
 
 async function boot() {
+  const isLocal = provider==='local';
   const k = document.getElementById('keyIn').value.trim();
-  if (!k) { showErr('API key required.'); return; }
-  const btn = document.getElementById('goBtn');
-  btn.textContent = 'ACTIVATING…';
-  btn.disabled = true;
+  if(!isLocal && !k){showErr('API key required.');return;}
 
-  try {
-    if (provider === 'gemini') {
-      const r = await fetch(GEMINI_URL(k), {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({contents:[{role:'user',parts:[{text:'Hi'}]}],generation_config:{max_output_tokens:4}})
+  const btn=document.getElementById('goBtn');
+  btn.disabled=true;
+
+  if(isLocal){
+    const modelId=document.getElementById('localModelSel').value;
+    btn.textContent='DOWNLOADING…';
+    const wrap=document.getElementById('progWrap');
+    wrap.style.display='block';
+
+    try {
+      const device = await loadLocalModel(modelId, ({status,file,progress})=>{
+        if(status==='downloading'||status==='loading'||status==='progress'){
+          const pct=progress?Math.round(progress):0;
+          document.getElementById('progFill').style.width=pct+'%';
+          document.getElementById('progLabel').textContent=(file?file.split('/').pop():'Loading')+` — ${pct}%`;
+        }
+        if(status==='done') document.getElementById('progLabel').textContent='✓ Ready';
       });
-      if (!r.ok) { const e=await r.json(); throw new Error(e?.error?.message||`HTTP ${r.status}`); }
+      document.getElementById('progLabel').textContent=`✓ Loaded on ${device.toUpperCase()}`;
+      lss('aria_provider','local');
+      provider='local';
+      enterApp();
+    } catch(e){
+      showErr(`Model load failed: ${e.message}`);
+      btn.disabled=false; btn.textContent='DOWNLOAD & ACTIVATE';
     }
-    // OpenRouter, Groq, OpenAI — skip validation to save quota
-  } catch(e) { showErr(`API error: ${e.message}`); btn.textContent='ACTIVATE ARIA'; btn.disabled=false; return; }
+    return;
+  }
 
-  apiKey = k;
-  lss('aria_key', k);
-  lss('aria_provider', provider);
+  // API providers
+  try {
+    if(provider==='gemini'){
+      const r=await fetch(GEMINI_URL(k),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:'Hi'}]}],generation_config:{max_output_tokens:4}})});
+      if(!r.ok){const e=await r.json();throw new Error(e?.error?.message||`HTTP ${r.status}`);}
+    }
+  } catch(e){showErr(`API error: ${e.message}`);btn.disabled=false;btn.textContent='ACTIVATE ARIA';return;}
+
+  apiKey=k; lss('aria_key',k); lss('aria_provider',provider);
+  enterApp();
+}
+
+function enterApp(){
   document.getElementById('setup').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
-  updateStatus();
-  renderNotes();
-  renderTasks();
-  initVoice();
-  if (provider === 'openrouter') {
-    const hdr = document.getElementById('orModelHdr');
-    if (hdr) { hdr.style.display = 'inline-block'; populateModelSelects(liveModels); }
+  updateStatus(); renderNotes(); renderTasks(); initVoice();
+  document.getElementById('providerLabel').textContent=provider==='local'?'LOCAL AI':provider.toUpperCase();
+  if(provider==='openrouter'){
+    fetchAndPopulateOR().then(()=>{
+      const h=document.getElementById('orModelHdr'); if(h)h.style.display='inline-block';
+    });
   }
 }
 
-function showErr(msg) {
-  const e = document.getElementById('serr');
-  e.textContent = msg; e.classList.remove('hidden');
-}
+function showErr(msg){const e=document.getElementById('serr');e.textContent=msg;e.classList.remove('hidden');}
 
-function resetKey() {
-  if (!confirm('Change API key / provider?')) return;
+function resetKey(){
+  if(!confirm('Change provider / API key? Local model cache is kept.'))return;
   lsDel('aria_key'); lsDel('aria_provider'); location.reload();
 }
 
-// ── Voice input ────────────────────────────────────────────────────────────
-function initVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return;
-  recog = new SR();
-  recog.continuous = false; recog.interimResults = true; recog.lang = 'en-US';
-  recog.onresult = e => {
-    const t = Array.from(e.results).map(r=>r[0].transcript).join('');
-    document.getElementById('ui').value = t;
-    resize(document.getElementById('ui'));
-  };
-  recog.onend = () => { if (micOn) { const v=document.getElementById('ui').value.trim(); if(v) send(); } stopMic(); };
-  recog.onerror = () => stopMic();
+// ── OpenRouter live models ─────────────────────────────────────────────────
+async function fetchAndPopulateOR(){
+  try{
+    const r=await fetch('https://openrouter.ai/api/v1/models');
+    const d=await r.json();
+    liveModels=(d.data||[]).filter(m=>m.id.endsWith(':free')||(parseFloat(m.pricing?.prompt||'1')===0&&parseFloat(m.pricing?.completion||'1')===0)).sort((a,b)=>(a.name||a.id).localeCompare(b.name||b.id));
+    const saved=ls('aria_or_model')||(liveModels[0]?.id||'');
+    ['orModel','orModelHdr'].forEach(sid=>{
+      const sel=document.getElementById(sid);
+      if(!sel)return;
+      sel.innerHTML=liveModels.map(m=>`<option value="${m.id}" ${m.id===saved?'selected':''}>${m.name||m.id}</option>`).join('');
+      sel.style.opacity='1';
+      sel.onchange=()=>{lss('aria_or_model',sel.value);['orModel','orModelHdr'].forEach(s2=>{const el=document.getElementById(s2);if(el&&el!==sel)el.value=sel.value;});};
+    });
+  }catch(e){}
 }
 
-function toggleMic() { if (!recog) { alert('Speech recognition unavailable.'); return; } micOn ? stopMic() : startMic(); }
-function startMic()  { micOn=true; recog.start(); document.getElementById('micBtn').classList.add('on'); document.getElementById('vst').textContent='● REC'; }
-function stopMic()   { micOn=false; try{recog.stop();}catch(e){} document.getElementById('micBtn').classList.remove('on'); document.getElementById('vst').textContent=''; }
+// ── Voice input ────────────────────────────────────────────────────────────
+function initVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return;
+  recog=new SR(); recog.continuous=false; recog.interimResults=true; recog.lang='en-US';
+  recog.onresult=e=>{const t=Array.from(e.results).map(r=>r[0].transcript).join('');document.getElementById('ui').value=t;resize(document.getElementById('ui'));};
+  recog.onend=()=>{if(micOn){const v=document.getElementById('ui').value.trim();if(v)send();}stopMic();};
+  recog.onerror=()=>stopMic();
+}
+function toggleMic(){if(!recog){alert('Speech recognition unavailable.');return;}micOn?stopMic():startMic();}
+function startMic(){micOn=true;recog.start();document.getElementById('micBtn').classList.add('on');document.getElementById('vst').textContent='● REC';}
+function stopMic(){micOn=false;try{recog.stop();}catch(e){}document.getElementById('micBtn').classList.remove('on');document.getElementById('vst').textContent='';}
 
 // ── Voice output ───────────────────────────────────────────────────────────
-function toggleTTS() {
-  ttsOn = !ttsOn;
-  const b = document.getElementById('voiceOutBtn');
-  b.textContent = ttsOn ? '🔊' : '🔇';
-  b.classList.toggle('on', ttsOn);
+function toggleTTS(){
+  ttsOn=!ttsOn;
+  const b=document.getElementById('voiceOutBtn');
+  b.textContent=ttsOn?'🔊':'🔇'; b.classList.toggle('on',ttsOn);
 }
-
-function speak(text) {
-  if (!window.speechSynthesis) return;
+function speak(text){
+  if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
-  const clean = text.replace(/[#*`_~\[\]]/g,'').replace(/\n+/g,'. ').slice(0,600);
-  const u = new SpeechSynthesisUtterance(clean);
-  u.rate=1.05; u.pitch=0.9; u.volume=0.9;
-  const v = speechSynthesis.getVoices().find(v=>v.name.includes('Google UK English Male'))
-         || speechSynthesis.getVoices().find(v=>v.lang==='en-GB')
-         || speechSynthesis.getVoices().find(v=>v.lang.startsWith('en'));
-  if (v) u.voice = v;
-  speechSynthesis.speak(u);
+  const u=new SpeechSynthesisUtterance(text.replace(/[#*`_~\[\]]/g,'').replace(/\n+/g,'. ').slice(0,600));
+  u.rate=1.05;u.pitch=0.9;u.volume=0.9;
+  const v=speechSynthesis.getVoices().find(v=>v.name.includes('Google UK English Male'))||speechSynthesis.getVoices().find(v=>v.lang==='en-GB')||speechSynthesis.getVoices().find(v=>v.lang.startsWith('en'));
+  if(v)u.voice=v; speechSynthesis.speak(u);
 }
 
 // ── File upload ────────────────────────────────────────────────────────────
-function uploadFile(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    const c = ev.target.result;
-    send(`Analyse this file — "${file.name}":\n\`\`\`\n${c.slice(0,10000)}\n\`\`\`${c.length>10000?'\n*(truncated to 10k chars)*':''}`);
-  };
-  r.readAsText(file);
-  e.target.value = '';
+function uploadFile(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{const c=ev.target.result;send(`Analyse this file — "${f.name}":\n\`\`\`\n${c.slice(0,10000)}\n\`\`\`${c.length>10000?'\n*(truncated)*':''}`);};
+  r.readAsText(f); e.target.value='';
 }
 
 // ── Sidebar ────────────────────────────────────────────────────────────────
-function toggleSidebar() {
-  sbOpen = !sbOpen;
-  document.getElementById('sb').classList.toggle('closed', !sbOpen);
-  if (sbOpen) { renderNotes(); renderTasks(); }
+function toggleSidebar(){sbOpen=!sbOpen;document.getElementById('sb').classList.toggle('closed',!sbOpen);if(sbOpen){renderNotes();renderTasks();}}
+function showTab(tab){
+  ['notes','tasks','log'].forEach(t=>document.getElementById(`tab-${t}`).classList.toggle('h',t!==tab));
+  document.querySelectorAll('.stab').forEach((b,i)=>b.classList.toggle('on',['notes','tasks','log'][i]===tab));
+  if(tab==='log')renderLog();if(tab==='notes')renderNotes();if(tab==='tasks')renderTasks();
 }
-
-function showTab(tab) {
-  currentTab = tab;
-  ['notes','tasks','log'].forEach(t => document.getElementById(`tab-${t}`).classList.toggle('h', t!==tab));
-  document.querySelectorAll('.stab').forEach((b,i) => b.classList.toggle('on', ['notes','tasks','log'][i]===tab));
-  if (tab==='log') renderLog();
-  if (tab==='notes') renderNotes();
-  if (tab==='tasks') renderTasks();
+function renderNotes(){
+  const n=getNotes(),el=document.getElementById('nl');
+  el.innerHTML=n.length?n.map(x=>`<div class="ni" onclick="openNote(${x.id})"><div class="it">${esc(x.title)}</div><div class="im"><span class="cat">${x.category}</span><span>${x.ts?x.ts.slice(0,10):''}</span></div></div>`).join(''):'<div style="padding:1rem;color:var(--dim);font-size:.78rem;text-align:center">No notes yet.</div>';
 }
-
-// ── Notes ──────────────────────────────────────────────────────────────────
-function renderNotes() {
-  const notes = getNotes();
-  const el = document.getElementById('nl');
-  el.innerHTML = notes.length
-    ? notes.map(n=>`<div class="ni" onclick="openNote(${n.id})"><div class="it">${esc(n.title)}</div><div class="im"><span class="cat">${n.category}</span><span>${n.ts?n.ts.slice(0,10):''}</span></div></div>`).join('')
-    : '<div style="padding:1rem;color:var(--dim);font-size:.78rem;text-align:center">No notes yet.</div>';
+function renderTasks(){
+  const t=getTasks().filter(x=>x.status==='pending'),el=document.getElementById('tl');
+  el.innerHTML=t.length?t.map(x=>`<div class="ti"><div class="it">${esc(x.title)}</div><div class="im"><span>${x.due?'📅 '+x.due:''}</span><button class="doneBtn" onclick="markDone(${x.id})">✓</button></div>${x.description?`<div style="font-size:.71rem;color:var(--mid);margin-top:.12rem">${esc(x.description)}</div>`:''}</div>`).join(''):'<div style="padding:1rem;color:var(--dim);font-size:.78rem;text-align:center">No open tasks.</div>';
 }
-
-function openNote(id) {
-  const n = getNotes().find(x=>x.id===id);
-  if (!n) return;
-  document.getElementById('nmTitle').textContent = n.title;
-  document.getElementById('nmBody').textContent  = n.content;
-  document.getElementById('nm').classList.remove('hidden');
+function renderLog(){
+  document.getElementById('ll').innerHTML=getMsgs().slice(-30).reverse().map(m=>`<div class="hi"><div class="hr-role ${m.role==='user'?'u':'a'}">${m.role==='user'?'YOU':'ARIA'}</div><div class="ht">${esc((m.text||'').slice(0,80))}…</div></div>`).join('');
 }
-function closeNote() { document.getElementById('nm').classList.add('hidden'); }
-
-// ── Tasks ──────────────────────────────────────────────────────────────────
-function renderTasks() {
-  const all     = getTasks();
-  const pending = all.filter(t=>t.status==='pending');
-  const el      = document.getElementById('tl');
-  el.innerHTML  = pending.length
-    ? pending.map(t=>`<div class="ti"><div class="it">${esc(t.title)}</div><div class="im"><span>${t.due?'📅 '+t.due:''}</span><button class="doneBtn" onclick="markDone(${t.id})">✓</button></div>${t.description?`<div style="font-size:.72rem;color:var(--mid);margin-top:.15rem">${esc(t.description)}</div>`:''}</div>`).join('')
-    : '<div style="padding:1rem;color:var(--dim);font-size:.78rem;text-align:center">No open tasks.</div>';
+function markDone(id){
+  const tasks=getTasks(),t=tasks.find(x=>x.id===id);
+  if(!t)return; t.status='completed'; saveTasks(tasks); renderTasks(); updateStatus(); showToast('note','COMPLETED',t.title);
 }
-
-function markDone(id) {
-  const tasks = getTasks();
-  const t = tasks.find(x=>x.id===id);
-  if (!t) return;
-  t.status = 'completed';
-  saveTasks(tasks);
-  renderTasks();
-  updateStatus();
-  showToast('note', 'COMPLETED', t.title);
-}
-
-// ── Log ───────────────────────────────────────────────────────────────────
-function renderLog() {
-  const msgs = getMsgs().slice(-30).reverse();
-  document.getElementById('ll').innerHTML = msgs.map(m=>`
-    <div class="hi">
-      <div class="hr-role ${m.role==='user'?'u':'a'}">${m.role==='user'?'YOU':'ARIA'}</div>
-      <div class="ht">${esc((m.text||'').slice(0,80))}…</div>
-    </div>`).join('');
-}
+function openNote(id){const n=getNotes().find(x=>x.id===id);if(!n)return;document.getElementById('nmTitle').textContent=n.title;document.getElementById('nmBody').textContent=n.content;document.getElementById('nm').classList.remove('hidden');}
+function closeNote(){document.getElementById('nm').classList.add('hidden');}
 
 // ── Session controls ───────────────────────────────────────────────────────
-function newSession() {
-  if (!confirm('Clear conversation? Notes, tasks, and context are kept.')) return;
+function newSession(){
+  if(!confirm('Clear conversation? Notes, tasks, and context are kept.'))return;
   saveMsgs([]);
-  document.getElementById('msgs').innerHTML = `
-    <div class="msg a"><div class="av"></div><div class="mc2">
-      <div class="mt">Session cleared. Context intact. What's next?</div>
-      <div class="ts">ARIA — ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
-    </div></div>`;
+  document.getElementById('msgs').innerHTML=`<div class="msg a"><div class="av"></div><div class="mc2"><div class="mt">Session cleared. Context intact. What's next?</div><div class="ts">ARIA — ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div></div>`;
   updateStatus();
 }
-
-function exportChat() {
-  const msgs = getMsgs();
-  const content = `# ARIA Session Export\n_${new Date().toLocaleString()}_\n\n` +
-    msgs.map(m=>`**${m.role==='user'?'You':'ARIA'}** — ${m.ts||''}\n\n${m.text}`).join('\n\n---\n\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([content],{type:'text/markdown'}));
-  a.download = `aria-${new Date().toISOString().slice(0,10)}.md`;
-  a.click();
+function exportChat(){
+  const c=`# ARIA Session Export\n_${new Date().toLocaleString()}_\n\n`+getMsgs().map(m=>`**${m.role==='user'?'You':'ARIA'}** — ${m.ts||''}\n\n${m.text}`).join('\n\n---\n\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/markdown'}));a.download=`aria-${new Date().toISOString().slice(0,10)}.md`;a.click();
 }
 
 // ── Input helpers ──────────────────────────────────────────────────────────
-function kd(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
-function resize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,130)+'px'; }
+function kd(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,130)+'px';}
 
-// ── Ghost text (Apptitude brand) ───────────────────────────────────────────
-function buildGhost() {
-  const gb = document.getElementById('ghostBg');
-  for (let i=0;i<14;i++) {
-    const row = document.createElement('div');
-    row.className = 'ghost-row';
-    row.textContent = 'APPTITUDE  ';
-    gb.appendChild(row);
-  }
+// ── Ghost text ─────────────────────────────────────────────────────────────
+function buildGhost(){
+  const gb=document.getElementById('ghostBg');
+  for(let i=0;i<14;i++){const r=document.createElement('div');r.className='ghost-row';r.textContent='APPTITUDE  ';gb.appendChild(r);}
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded',()=>{
   buildGhost();
-  buildORDropdown();
-  // Pre-select provider tab
-  document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.t===provider));
+
+  // Sync hint + button text for default tab
   document.querySelectorAll('.hint').forEach(h=>h.classList.add('hidden'));
   document.getElementById(`h-${provider}`)?.classList.remove('hidden');
+  document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.t===provider));
+  document.getElementById('keyIn').style.display=provider==='local'?'none':'block';
+  document.getElementById('goBtn').textContent=provider==='local'?'DOWNLOAD & ACTIVATE':'ACTIVATE ARIA';
+  if(provider==='openrouter') fetchAndPopulateOR();
 
-  if (apiKey) {
-    document.getElementById('setup').classList.add('hidden');
-    document.getElementById('app').classList.remove('hidden');
-    const msgs = getMsgs();
-    if (msgs.length) { msgs.forEach(m=>renderMsg(m)); document.getElementById('msgs').scrollTop=99999; }
-    updateStatus();
-    renderNotes();
-    renderTasks();
-    initVoice();
-    if (provider === 'openrouter') {
-      fetchFreeModels().then(m => {
-        populateModelSelects(m);
-        const hdr = document.getElementById('orModelHdr');
-        if (hdr) hdr.style.display = 'inline-block';
+  // Auto-launch if already set up
+  if(provider==='local'){
+    const modelId=ls('aria_local_model');
+    if(modelId){
+      // Restore UI to app, then reload model from cache (should be fast)
+      document.getElementById('setup').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      const msgs=getMsgs(); if(msgs.length){msgs.forEach(m=>renderMsg(m));document.getElementById('msgs').scrollTop=99999;}
+      updateStatus(); renderNotes(); renderTasks(); initVoice();
+      document.getElementById('providerLabel').textContent='LOCAL AI';
+      setProcessing(true,'LOADING MODEL');
+      loadLocalModel(modelId).then(device=>{
+        setProcessing(false);
+        showToast('note','MODEL READY',`Running on ${device.toUpperCase()}`);
+      }).catch(e=>{
+        setProcessing(false);
+        addMsg('aria',`Could not reload local model: ${e.message}\n\nClick ⚙ to reconfigure.`);
       });
     }
+  } else if(apiKey){
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    const msgs=getMsgs(); if(msgs.length){msgs.forEach(m=>renderMsg(m));document.getElementById('msgs').scrollTop=99999;}
+    updateStatus(); renderNotes(); renderTasks(); initVoice();
+    document.getElementById('providerLabel').textContent=provider.toUpperCase();
+    if(provider==='openrouter'){fetchAndPopulateOR().then(()=>{const h=document.getElementById('orModelHdr');if(h)h.style.display='inline-block';});}
   }
 });
 </script>
