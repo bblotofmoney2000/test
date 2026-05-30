@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARVIS — Intelligent Systems Interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ── Setup Modal ──────────────────────────────────────────────────────── -->
+<div id="setup-modal" class="modal {{ 'hidden' if configured else '' }}">
+  <div class="modal-content">
+    <div class="arc-reactor small"></div>
+    <h1>J·A·R·V·I·S</h1>
+    <p class="subtitle">JUST A RATHER VERY INTELLIGENT SYSTEM</p>
+    <p class="setup-description">Select your AI provider and paste your API key to initialise.</p>
+
+    <div class="api-tabs">
+      <button class="tab-btn active" data-type="gemini">Gemini — Free</button>
+      <button class="tab-btn" data-type="groq">Groq — Free</button>
+      <button class="tab-btn" data-type="openai">OpenAI</button>
+    </div>
+
+    <div class="setup-hint" id="setup-hint-gemini">
+      Free key in 30 seconds →
+      <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
+      → <strong>Get API Key</strong> → Copy
+    </div>
+    <div class="setup-hint hidden" id="setup-hint-groq">
+      Free key →
+      <a href="https://console.groq.com/keys" target="_blank">console.groq.com</a>
+      → <strong>API Keys</strong> → Create key
+    </div>
+    <div class="setup-hint hidden" id="setup-hint-openai">
+      Get your key at
+      <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a>
+      → <strong>API Keys</strong>
+    </div>
+
+    <input type="password" id="api-key-input" class="api-input"
+           placeholder="Paste your API key here…"
+           onkeydown="if(event.key==='Enter') submitSetup()">
+
+    <button class="setup-btn" onclick="submitSetup()">INITIALIZE JARVIS</button>
+
+    <div id="setup-error" class="error-msg hidden"></div>
+  </div>
+</div>
+
+<!-- ── Main Interface ────────────────────────────────────────────────────── -->
+<div id="main-interface" class="{{ '' if configured else 'hidden' }}">
+
+  <!-- Header -->
+  <header class="jarvis-header">
+    <div class="header-left">
+      <div class="arc-reactor tiny pulse"></div>
+      <span class="logo-text">J.A.R.V.I.S</span>
+      <span class="version-tag">v2.0 // ENTERPRISE</span>
+    </div>
+
+    <div class="header-center">
+      <div class="status-indicators">
+        <div class="indicator">
+          <div class="dot green"></div>
+          <span>AI ONLINE</span>
+        </div>
+        <div class="indicator">
+          <div class="dot blue"></div>
+          <span id="memory-count">— MEMORIES</span>
+        </div>
+        <div class="indicator">
+          <div class="dot yellow"></div>
+          <span id="task-count">— TASKS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="icon-btn" id="speech-btn" onclick="toggleSpeech()" title="Voice Output: OFF">🔇</button>
+      <button class="icon-btn" onclick="toggleSidebar()" title="Toggle Panel">⊞</button>
+      <button class="icon-btn" onclick="clearChat()" title="New Session">↺</button>
+      <button class="icon-btn" onclick="exportChat()" title="Export as Markdown">↓</button>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="main-content">
+
+    <!-- Chat -->
+    <div class="chat-container">
+      <div class="chat-messages" id="chat-messages">
+        <div class="message jarvis-msg">
+          <div class="msg-avatar">J</div>
+          <div class="msg-content">
+            <div class="msg-text">
+              Good day. All systems are operational and standing by.<br><br>
+              I am JARVIS — your business intelligence system, strategic advisor, and operational backbone.
+              I have full access to your files, can search the web in real time, manage your notes and tasks,
+              and I remember everything we discuss.<br><br>
+              How may I be of service, Sir?
+            </div>
+            <div class="msg-time">JARVIS — System initialised</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="typing-indicator hidden" id="typing-indicator">
+        <div class="msg-avatar">J</div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+        <span class="processing-text" id="processing-text">PROCESSING</span>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" onclick="showSidebarTab('notes')">NOTES</button>
+        <button class="sidebar-tab" onclick="showSidebarTab('tasks')">TASKS</button>
+        <button class="sidebar-tab" onclick="showSidebarTab('history')">LOG</button>
+      </div>
+
+      <div id="sidebar-notes" class="sidebar-content">
+        <div class="sidebar-header">
+          <span>INTELLIGENCE FILES</span>
+          <button class="mini-btn" onclick="loadNotes()" title="Refresh">↻</button>
+        </div>
+        <div id="notes-list" class="items-list">
+          <div style="padding:.8rem;color:var(--txt-dim);font-size:.8rem;text-align:center">Loading…</div>
+        </div>
+      </div>
+
+      <div id="sidebar-tasks" class="sidebar-content hidden">
+        <div class="sidebar-header">
+          <span>ACTION ITEMS</span>
+          <button class="mini-btn" onclick="loadTasks()" title="Refresh">↻</button>
+        </div>
+        <div id="tasks-list" class="items-list">
+          <div style="padding:.8rem;color:var(--txt-dim);font-size:.8rem;text-align:center">Loading…</div>
+        </div>
+      </div>
+
+      <div id="sidebar-history" class="sidebar-content hidden">
+        <div class="sidebar-header">
+          <span>CONVERSATION LOG</span>
+          <button class="mini-btn" onclick="loadHistory()" title="Refresh">↻</button>
+        </div>
+        <div id="history-list" class="items-list"></div>
+      </div>
+    </div>
+
+  </div><!-- .main-content -->
+
+  <!-- Input -->
+  <div class="input-area">
+    <div class="input-container">
+      <button class="input-btn" id="voice-btn" onclick="toggleVoice()" title="Voice Input">🎙</button>
+      <label class="input-btn" title="Upload file for analysis">
+        📎
+        <input type="file" id="file-input"
+               accept=".txt,.md,.py,.js,.ts,.json,.csv,.html,.css"
+               style="display:none" onchange="handleFileUpload(event)">
+      </label>
+      <textarea id="user-input"
+                placeholder="Speak your mind, Sir…"
+                rows="1"
+                onkeydown="handleKeydown(event)"
+                oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        <span>TRANSMIT</span> <span>▶</span>
+      </button>
+    </div>
+    <div class="input-footer">
+      <span id="voice-status" class="voice-status"></span>
+      <span class="input-hint">Shift+Enter for new line &nbsp;·&nbsp; Enter to send</span>
+    </div>
+  </div>
+
+</div><!-- #main-interface -->
+
+<!-- Note Detail Modal -->
+<div id="note-modal" class="modal hidden">
+  <div class="modal-content large">
+    <div class="modal-header">
+      <h2 id="note-modal-title"></h2>
+      <button onclick="closeNoteModal()">✕</button>
+    </div>
+    <div id="note-modal-content" class="note-content"></div>
+  </div>
+</div>
+
+<script src="/static/jarvis.js"></script>
+<script>
+  // Load sidebar data on start if already configured
+  {% if configured %}
+  document.addEventListener('DOMContentLoaded', () => {
+    loadNotes();
+    loadTasks();
+    fetchStatus();
+  });
+  {% endif %}
+</script>
+</body>
+</html>
