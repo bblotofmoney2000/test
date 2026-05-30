@@ -240,6 +240,7 @@ html,body{height:100%;font-family:var(--ui);background:var(--bg);color:var(--tex
       <div class="ind"><div class="dot g"></div><span>ONLINE</span></div>
       <div class="ind"><div class="dot r"></div><span id="mc">—</span></div>
       <div class="ind"><div class="dot o"></div><span id="tc">—</span></div>
+      <select id="orModelHdr" title="Switch model" style="display:none;font-family:var(--mono);font-size:.58rem;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--mid);padding:.18rem .4rem;cursor:pointer;max-width:160px;outline:none"></select>
     </div>
     <div class="hr2">
       <button class="ic" id="voiceOutBtn" onclick="toggleTTS()" title="Voice output OFF">🔇</button>
@@ -326,13 +327,14 @@ const OAI_URL     = 'https://api.openai.com/v1/chat/completions';
 const OR_URL      = 'https://openrouter.ai/api/v1/chat/completions';
 
 // ── State ──────────────────────────────────────────────────────────────────
-let provider = ls('aria_provider') || 'openrouter';
-let apiKey   = ls('aria_key')      || '';
-let ttsOn    = false;
-let micOn    = false;
-let recog    = null;
-let sbOpen   = true;
-let currentTab = 'notes';
+let provider    = ls('aria_provider') || 'openrouter';
+let apiKey      = ls('aria_key')      || '';
+let ttsOn       = false;
+let micOn       = false;
+let recog       = null;
+let sbOpen      = true;
+let currentTab  = 'notes';
+let liveModels  = [];   // populated after fetching OpenRouter free models
 
 // ── LocalStorage ───────────────────────────────────────────────────────────
 function ls(k,d){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):d}catch{return d}}
@@ -537,10 +539,30 @@ async function getResponse(userText) {
   const display = getMsgs();
 
   if (provider === 'openrouter') {
-    const sel   = document.getElementById('orModel');
-    const model = (sel && sel.value) || ls('aria_or_model') || 'meta-llama/llama-3.1-8b-instruct:free';
-    return callOpenAI([...display, {role:'user',text:userText}], OR_URL, model,
-      {'HTTP-Referer':'https://apptitude.app','X-Title':'ARIA'});
+    const sel     = document.getElementById('orModelHdr') || document.getElementById('orModel');
+    const current = (sel && sel.value) || ls('aria_or_model') || (liveModels[0]?.id || 'meta-llama/llama-3.1-8b-instruct:free');
+    const msgs    = [...display, {role:'user',text:userText}];
+    const headers = {'HTTP-Referer':'https://apptitude.app','X-Title':'ARIA'};
+
+    // Try current model, then auto-fallback through free list
+    const tryOrder = [current, ...liveModels.map(m=>m.id).filter(id=>id!==current)];
+    for (let i = 0; i < Math.min(tryOrder.length, 4); i++) {
+      const model = tryOrder[i];
+      try {
+        if (i > 0) {
+          setStatus(`TRYING ${(liveModels.find(m=>m.id===model)?.name||model).split('/').pop().toUpperCase()}`);
+          // Update both selects to reflect the working model
+          lss('aria_or_model', model);
+          ['orModel','orModelHdr'].forEach(sid => { const s=document.getElementById(sid); if(s) s.value=model; });
+        }
+        return await callOpenAI(msgs, OR_URL, model, headers);
+      } catch(e) {
+        const msg = e.message.toLowerCase();
+        const isProviderErr = msg.includes('provider') || msg.includes('endpoint') || msg.includes('503') || msg.includes('502') || msg.includes('overloaded');
+        if (!isProviderErr || i === Math.min(tryOrder.length,4)-1) throw e;
+        // Provider down — silently try next
+      }
+    }
   }
   if (provider === 'groq') {
     return callOpenAI([...display, {role:'user',text:userText}], GROQ_URL, 'llama-3.3-70b-versatile');
@@ -699,30 +721,48 @@ function setProcessing(on, txt) {
 }
 
 // ── Setup ──────────────────────────────────────────────────────────────────
-// Populate OpenRouter model dropdown — live from API
-async function buildORDropdown() {
-  const sel = document.getElementById('orModel');
-  if (!sel) return;
-  sel.innerHTML = '<option disabled selected>Loading free models…</option>';
-  sel.style.opacity = '.5';
+// Fetch & cache live free models from OpenRouter
+async function fetchFreeModels() {
   try {
     const r = await fetch('https://openrouter.ai/api/v1/models');
     const d = await r.json();
-    const free = (d.data || [])
+    liveModels = (d.data || [])
       .filter(m => m.id.endsWith(':free') ||
         (parseFloat(m.pricing?.prompt||'1')===0 && parseFloat(m.pricing?.completion||'1')===0))
       .sort((a,b) => (a.name||a.id).localeCompare(b.name||b.id));
-    if (!free.length) throw new Error('none');
-    const saved = ls('aria_or_model') || free[0].id;
-    sel.innerHTML = free.map(m =>
+    return liveModels;
+  } catch(e) {
+    liveModels = [{id:'meta-llama/llama-3.1-8b-instruct:free', name:'Llama 3.1 8B'}];
+    return liveModels;
+  }
+}
+
+// Populate OpenRouter model dropdowns (setup + header)
+function populateModelSelects(models) {
+  const saved = ls('aria_or_model') || (models[0]?.id || '');
+  ['orModel','orModelHdr'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = models.map(m =>
       `<option value="${m.id}" ${m.id===saved?'selected':''}>${m.name||m.id}</option>`
     ).join('');
-    if (!free.find(m=>m.id===saved)) lss('aria_or_model', free[0].id);
-  } catch(e) {
-    sel.innerHTML = '<option value="meta-llama/llama-3.1-8b-instruct:free">Llama 3.1 8B (fallback)</option>';
-  }
-  sel.style.opacity = '1';
-  sel.onchange = () => lss('aria_or_model', sel.value);
+    sel.style.opacity = '1';
+    sel.onchange = () => {
+      lss('aria_or_model', sel.value);
+      // sync both selects
+      ['orModel','orModelHdr'].forEach(sid => {
+        const s2 = document.getElementById(sid);
+        if (s2 && s2 !== sel) s2.value = sel.value;
+      });
+    };
+  });
+}
+
+async function buildORDropdown() {
+  const sel = document.getElementById('orModel');
+  if (sel) { sel.innerHTML = '<option disabled selected>Loading models…</option>'; sel.style.opacity='.5'; }
+  const models = await fetchFreeModels();
+  populateModelSelects(models);
 }
 
 document.querySelectorAll('.tb').forEach(b => b.addEventListener('click', () => {
@@ -760,6 +800,10 @@ async function boot() {
   renderNotes();
   renderTasks();
   initVoice();
+  if (provider === 'openrouter') {
+    const hdr = document.getElementById('orModelHdr');
+    if (hdr) { hdr.style.display = 'inline-block'; populateModelSelects(liveModels); }
+  }
 }
 
 function showErr(msg) {
@@ -945,6 +989,13 @@ window.addEventListener('DOMContentLoaded', () => {
     renderNotes();
     renderTasks();
     initVoice();
+    if (provider === 'openrouter') {
+      fetchFreeModels().then(m => {
+        populateModelSelects(m);
+        const hdr = document.getElementById('orModelHdr');
+        if (hdr) hdr.style.display = 'inline-block';
+      });
+    }
   }
 });
 </script>
